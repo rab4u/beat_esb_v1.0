@@ -47,7 +47,7 @@ public class ESBStmData {
         stmConData.put(xlSheet.getCell(0, 1).getContents(), xlSheet.getCell(1, 1).getContents());
         stmConData.put(xlSheet.getCell(0, 2).getContents(), xlSheet.getCell(1, 2).getContents());
         stmConData.put(xlSheet.getCell(0, 3).getContents(), xlSheet.getCell(1, 3).getContents());
-       
+
         stmConData.put(xlSheet.getCell(0, 4).getContents(), xlSheet.getCell(1, 4).getContents());
         stmConData.put(xlSheet.getCell(0, 5).getContents(), xlSheet.getCell(1, 5).getContents());
         stmConData.put(xlSheet.getCell(0, 6).getContents(), xlSheet.getCell(1, 6).getContents());
@@ -64,15 +64,8 @@ public class ESBStmData {
         stmConData.put(xlSheet.getCell(0, 16).getContents(), xlSheet.getCell(1, 16).getContents());
         stmConData.put(xlSheet.getCell(0, 17).getContents(), xlSheet.getCell(1, 17).getContents());
 
-        for (Map.Entry m : stmConData.entrySet()) {
-            System.out.println(m.getKey() + " : " + m.getValue());
-        }
+        return stmConData;
 
-        if (!stmConData.isEmpty()) {
-            return stmConData;
-        }
-
-        return null;
     }
 
     public ObservableList<ESBStmBean> getStmData() {
@@ -89,11 +82,8 @@ public class ESBStmData {
             bStmBeansData.add(bStmBean);
         }
 
-        if (!bStmBeansData.isEmpty()) {
-            return bStmBeansData;
-        }
+        return bStmBeansData;
 
-        return null;
     }
 
 }

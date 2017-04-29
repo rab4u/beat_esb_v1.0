@@ -379,6 +379,10 @@ public class MainStageController implements Initializable {
             }
         });
 
+        stm_src_field_tbl_col.setCellValueFactory(new PropertyValueFactory<>("sourceFieldName"));
+        stm_src_tran_tbl_col.setCellValueFactory(new PropertyValueFactory<>("proposedTransRule"));
+        stm_trg_field_tbl_col.setCellValueFactory(new PropertyValueFactory<>("targetFieldName"));
+
     }
 
     private void dbtree_SelectionChanged(TreeItem<String> nodeselect) {
@@ -1243,23 +1247,18 @@ public class MainStageController implements Initializable {
             stmData = eSBStmData.getStmData();
             System.out.println("Getting Data");
 
+            /*Setting the Connection Data to the FX Fields  */
+            if (!stmData.isEmpty() && !stmConData.isEmpty()) {
+
+                tfsrcconname.setText("FlatFile::" + stmConData.get("*Source Host Name").toString() + "::" + stmConData.get("Source File Location").toString() + "\\" + stmConData.get("*Source DB/File Name"));
+                tftrgconname.setText("FlatFile::" + stmConData.get("*Target Host Name").toString() + "::" + stmConData.get("Target File Location").toString() + "\\" + stmConData.get("*Target DB/File Name"));
+                stm_conTitle_txt_field.setText(stmConData.get("*Title").toString());
+                stm_conAut_txt_field.setText(stmConData.get("*Author").toString());
+                stm_conVer_txt_field.setText(stmConData.get("Version & History").toString());
+                esb_stm_tableview.setItems(stmData);
+            }
+
         }
-
-        /*Setting the Connection Data to the FX Fields  */
-        if (stmData != null) {
-
-            tfsrcconname.setText("FlatFile::" + stmConData.get("*Source Host Name").toString() + "::" + stmConData.get("Source File Location").toString() + "\\" + stmConData.get("*Source DB/File Name"));
-            tftrgconname.setText("FlatFile::" + stmConData.get("*Target Host Name").toString() + "::" + stmConData.get("Target File Location").toString() + "\\" + stmConData.get("*Target DB/File Name"));
-            stm_conTitle_txt_field.setText(stmConData.get("*Title").toString());
-            stm_conAut_txt_field.setText(stmConData.get("*Author").toString());
-            stm_conVer_txt_field.setText(stmConData.get("Version & History").toString());
-
-        }
-
-        stm_src_field_tbl_col.setCellValueFactory(new PropertyValueFactory<>("sourceFieldName"));
-        stm_src_tran_tbl_col.setCellValueFactory(new PropertyValueFactory<>("proposedTransRule"));
-        stm_trg_field_tbl_col.setCellValueFactory(new PropertyValueFactory<>("targetFieldName"));
-        esb_stm_tableview.setItems(stmData);
 
     }
 
