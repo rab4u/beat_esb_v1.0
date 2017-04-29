@@ -35,7 +35,7 @@
               <items>
                 <Button fx:id="adddb" mnemonicParsing="false" onAction="#dbAddButtonAction" text="ADD DB" />
                   <Button layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#ffAddButtonAction" text="ADD FLAT FILE" />
-                  <Button layoutX="74.0" layoutY="13.0" mnemonicParsing="false" text="UPLOAD TEST PLAN " />
+                  <Button disable="true" layoutX="74.0" layoutY="13.0" mnemonicParsing="false" text="UPLOAD TEST PLAN " />
                   <Button mnemonicParsing="false" onAction="#esbStmImportButton" text="UPLOAD ESB STM" />
               </items>
             </ToolBar>
@@ -310,7 +310,7 @@
                                                                                           <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                                        </HBox.margin>
                                                                                     </Label>
-                                                                                    <TextField HBox.hgrow="ALWAYS">
+                                                                                    <TextField fx:id="stm_conTitle_txt_field" HBox.hgrow="ALWAYS">
                                                                                        <HBox.margin>
                                                                                           <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                                        </HBox.margin>
@@ -320,7 +320,7 @@
                                                                                           <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                                        </HBox.margin>
                                                                                     </Label>
-                                                                                    <TextField HBox.hgrow="ALWAYS">
+                                                                                    <TextField fx:id="stm_conAut_txt_field" HBox.hgrow="ALWAYS">
                                                                                        <HBox.margin>
                                                                                           <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                                        </HBox.margin>
@@ -330,7 +330,7 @@
                                                                                           <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                                                        </HBox.margin>
                                                                                     </Label>
-                                                                                    <TextField HBox.hgrow="ALWAYS">
+                                                                                    <TextField fx:id="stm_conVer_txt_field" HBox.hgrow="ALWAYS">
                                                                                        <HBox.margin>
                                                                                           <Insets bottom="2.0" left="2.0" right="10.0" top="2.0" />
                                                                                        </HBox.margin>

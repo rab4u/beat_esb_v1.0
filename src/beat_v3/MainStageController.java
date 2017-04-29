@@ -379,6 +379,7 @@ public class MainStageController implements Initializable {
             }
         });
 
+        /*The below statements are used STM table */
         stm_src_field_tbl_col.setCellValueFactory(new PropertyValueFactory<>("sourceFieldName"));
         stm_src_tran_tbl_col.setCellValueFactory(new PropertyValueFactory<>("proposedTransRule"));
         stm_trg_field_tbl_col.setCellValueFactory(new PropertyValueFactory<>("targetFieldName"));
