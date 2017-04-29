@@ -35,7 +35,7 @@
               <items>
                 <Button fx:id="adddb" mnemonicParsing="false" onAction="#dbAddButtonAction" text="ADD DB" />
                   <Button layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#ffAddButtonAction" text="ADD FLAT FILE" />
-                  <Button disable="true" layoutX="74.0" layoutY="13.0" mnemonicParsing="false" text="UPLOAD TEST PLAN " />
+                  <Button layoutX="74.0" layoutY="13.0" mnemonicParsing="false" text="UPLOAD TEST PLAN " />
                   <Button mnemonicParsing="false" onAction="#esbStmImportButton" text="UPLOAD ESB STM" />
               </items>
             </ToolBar>
