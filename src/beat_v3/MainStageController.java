@@ -1294,7 +1294,7 @@ public class MainStageController implements Initializable {
     }
 
     /*Method to set Columns Dynamically to the Multiple Table View --Adithya 30-04-2017*/
-    public void setTableView(TableView tableView, ObservableList<String> tableColumns) {
+    public void setColumnsTableView(TableView tableView, ObservableList<String> tableColumns) {
         System.out.println("setTableView method Called");
         if (!tableColumns.isEmpty()) {
             for (String tableColumn : tableColumns) {
