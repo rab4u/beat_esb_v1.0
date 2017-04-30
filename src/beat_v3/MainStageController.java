@@ -1254,7 +1254,7 @@ public class MainStageController implements Initializable {
     }
 
     @FXML
-    public void esbStmImportButton(ActionEvent event) throws NullPointerException, IOException, BiffException {
+    public void esbStmImportButton(ActionEvent event) throws NullPointerException, IOException, BiffException, Exception {
 
         System.out.println("Clicked - esbStmImportButton");
         Stage mainstage = (Stage) mainvbox.getScene().getWindow();
@@ -1285,8 +1285,9 @@ public class MainStageController implements Initializable {
                     stm_conVer_txt_field.setText(stmConData.get("Version & History").toString());
                     esb_stm_tableview.setItems(stmData);
                     
+                    //applying Transformation and to the source file
                     ESBSrcTran bSrcTran = new ESBSrcTran(stmData);
-                    bSrcTran.applySRCTran();
+                    bSrcTran.applySRCTran(srcfile);
                     
                 } else {
                     new ExceptionUI(new Exception("[Error] Source or Target File not found! Please check"));

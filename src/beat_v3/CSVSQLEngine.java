@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -34,6 +35,22 @@ public class CSVSQLEngine {
         // Load the driver.
         Class.forName("org.relique.jdbc.csv.CsvDriver");
         conn = DriverManager.getConnection("jdbc:relique:csv:" + path);
+        return conn;
+    }
+    
+    public Connection getFFConn(String path,String header) throws Exception {
+        Connection conn = null;
+
+        File f = new File(path);
+        path = f.getParent();
+        System.out.println("CSV ENGINE FF CONN PATH:" + path);
+        // Load the driver.
+        Class.forName("org.relique.jdbc.csv.CsvDriver");
+        Properties csvprops = new java.util.Properties();
+        csvprops.put("suppressHeaders", "true");
+        csvprops.put("headerline", header);
+        csvprops.put("skipLeadingDataLines",1);
+        conn = DriverManager.getConnection("jdbc:relique:csv:" + path,csvprops);
         return conn;
     }
 
@@ -134,6 +151,41 @@ public class CSVSQLEngine {
         System.out.println("CSV ENGINE FF TABLE DATA");
 
         Connection conn = getFFConn(path);
+        String temp;
+        int j = 0;
+        ObservableList<Object> data = FXCollections.observableArrayList();
+
+        Statement stmt = conn.createStatement();
+
+        // Select the ID and NAME columns from sample.csv
+        ResultSet rs = stmt.executeQuery(SQL);
+        
+        while (rs.next()) {
+            //Iterate Row
+            ObservableList<String> row = FXCollections.observableArrayList();
+            //row.add(String.valueOf(++j));
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                //Iterate Column
+                temp = rs.getString(i);
+                if (temp == null) {
+                    row.add("null");
+                } else {
+                    row.add(temp);
+                }
+            }
+            System.out.println("Row [1] added " + row);
+            data.add(row);
+        }
+        
+        return data;
+    }
+    
+
+        public ObservableList getFFTableData(String path, String SQL, String header) throws Exception {
+
+        System.out.println("CSV ENGINE FF TABLE DATA");
+
+        Connection conn = getFFConn(path,header);
         String temp;
         int j = 0;
         ObservableList<Object> data = FXCollections.observableArrayList();
