@@ -1274,8 +1274,8 @@ public class MainStageController implements Initializable {
 
                 //STM VALIDATOR OBJECT
                 ESBSTMValidator estmvalid = new ESBSTMValidator();
-                String srcfile = stmConData.get("Source File Location").toString() + "\\" + stmConData.get("*Source DB/File Name");
-                String trgfile = stmConData.get("Target File Location").toString() + "\\" + stmConData.get("*Target DB/File Name");
+                String srcfile = stmConData.get("Source File Location").toString() + "\\" + stmConData.get("*Source DB/File Name").trim();
+                String trgfile = stmConData.get("Target File Location").toString() + "\\" + stmConData.get("*Target DB/File Name").trim();
 
                 if (estmvalid.checkSrcTrgFiles(srcfile, trgfile)) {
                     tfsrcconname.setText("FlatFile::" + stmConData.get("*Source Host Name").toString() + "::" + srcfile);

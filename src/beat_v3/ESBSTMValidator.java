@@ -15,6 +15,9 @@ public class ESBSTMValidator {
     
     public boolean checkSrcTrgFiles(String srcfile,String trgfile){
         
+        System.out.println("checkSrcTrgFiles - called");
+        System.out.println("[INFO] SRC FILE NAME : "+ srcfile +" TRG FILE NAME : "+trgfile);
+        
         File src = new File(srcfile.trim());
         File trg = new File(trgfile.trim());
         
