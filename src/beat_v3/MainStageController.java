@@ -143,7 +143,6 @@ public class MainStageController implements Initializable {
     private ObservableMap<String, String> stmConData;
 
     // @FXML
-    // private WebView cnt_result_webview;
     //Variables
     private LoadConnectionsTreeView lctv;
     private LoadFlatFilesTreeView lfftv;
@@ -164,6 +163,9 @@ public class MainStageController implements Initializable {
 
     //file chooser
     final FileChooser fileChooser = new FileChooser();
+    
+
+    
 
     @FXML
     private void dbAddButtonAction(ActionEvent event) {
@@ -379,7 +381,6 @@ public class MainStageController implements Initializable {
             }
         });
 
-        /*The below statements are used STM table */
         stm_src_field_tbl_col.setCellValueFactory(new PropertyValueFactory<>("sourceFieldName"));
         stm_src_tran_tbl_col.setCellValueFactory(new PropertyValueFactory<>("proposedTransRule"));
         stm_trg_field_tbl_col.setCellValueFactory(new PropertyValueFactory<>("targetFieldName"));
@@ -1250,13 +1251,25 @@ public class MainStageController implements Initializable {
 
             /*Setting the Connection Data to the FX Fields  */
             if (!stmData.isEmpty() && !stmConData.isEmpty()) {
-
-                tfsrcconname.setText("FlatFile::" + stmConData.get("*Source Host Name").toString() + "::" + stmConData.get("Source File Location").toString() + "\\" + stmConData.get("*Source DB/File Name"));
-                tftrgconname.setText("FlatFile::" + stmConData.get("*Target Host Name").toString() + "::" + stmConData.get("Target File Location").toString() + "\\" + stmConData.get("*Target DB/File Name"));
+                
+                //STM VALIDATOR OBJECT
+                ESBSTMValidator estmvalid = new ESBSTMValidator();
+                String srcfile = stmConData.get("Source File Location").toString() + "\\" + stmConData.get("*Source DB/File Name");
+                String trgfile = stmConData.get("Target File Location").toString() + "\\" + stmConData.get("*Target DB/File Name");
+                
+                if(estmvalid.checkSrcTrgFiles(srcfile, trgfile))
+                {
+                tfsrcconname.setText("FlatFile::" + stmConData.get("*Source Host Name").toString() + "::" + srcfile);
+                tftrgconname.setText("FlatFile::" + stmConData.get("*Target Host Name").toString() + "::" + trgfile);
                 stm_conTitle_txt_field.setText(stmConData.get("*Title").toString());
                 stm_conAut_txt_field.setText(stmConData.get("*Author").toString());
                 stm_conVer_txt_field.setText(stmConData.get("Version & History").toString());
                 esb_stm_tableview.setItems(stmData);
+                }
+                else
+                {
+                    new ExceptionUI(new Exception("[Error] Source or Target File not found! Please check"));
+                }
             }
 
         }
