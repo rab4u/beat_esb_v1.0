@@ -130,19 +130,41 @@ public class MainStageController implements Initializable {
     @FXML
     private SplitPane workspaceSplitPane;
 
-    /*STM Table Data */
+    /*Code Created By the Adithya 29-04-2017 */
+ /*STM Table Data */
     @FXML
     private TextField stm_conTitle_txt_field, stm_conAut_txt_field, stm_conVer_txt_field;
 
     @FXML
-    private TableView esb_stm_tableview = new TableView();
+    private TableView esb_stm_tableview;
     @FXML
     private TableColumn stm_src_field_tbl_col, stm_src_tran_tbl_col, stm_trg_field_tbl_col;
 
+    /*Objects to Store the STM Connection and processing Data */
     private ObservableList<ESBStmBean> stmData;
     private ObservableMap<String, String> stmConData;
 
+    /*Tabbed Pane Tables and Columns 30-04-2017 */
+    @FXML
+    private TableView totalCounts_tbl_view,
+            totalCounts_null_tbl_view,
+            totalCountsnot_null_tbl_view,
+            countDupli_tbl_view,
+            countDistinct_tbl_view,
+            countNumerics_tbl_view,
+            max_tbl_view,
+            min_tbl_view,
+            sourceData_tbl_view,
+            targetData_tbl_view,
+            unMatchsourceData_tbl_view,
+            unMatchtargetData_tbl_view;
+
+    @FXML
+    private TableColumn tabPane_tbl_columns;
+
+    /*End of the Code by Adithya  */
     // @FXML
+    // private WebView cnt_result_webview;
     //Variables
     private LoadConnectionsTreeView lctv;
     private LoadFlatFilesTreeView lfftv;
@@ -163,9 +185,6 @@ public class MainStageController implements Initializable {
 
     //file chooser
     final FileChooser fileChooser = new FileChooser();
-    
-
-    
 
     @FXML
     private void dbAddButtonAction(ActionEvent event) {
@@ -381,6 +400,7 @@ public class MainStageController implements Initializable {
             }
         });
 
+        /*The below statements are used STM table */
         stm_src_field_tbl_col.setCellValueFactory(new PropertyValueFactory<>("sourceFieldName"));
         stm_src_tran_tbl_col.setCellValueFactory(new PropertyValueFactory<>("proposedTransRule"));
         stm_trg_field_tbl_col.setCellValueFactory(new PropertyValueFactory<>("targetFieldName"));
@@ -1247,33 +1267,44 @@ public class MainStageController implements Initializable {
             ESBStmData eSBStmData = new ESBStmData(file.toString());
             stmConData = eSBStmData.getSTMConData();
             stmData = eSBStmData.getStmData();
-            System.out.println("Getting Data");
+            System.out.println("Getting STM Data");
 
-            /*Setting the Connection Data to the FX Fields  */
+            /*Setting the Connection Data to the FX Fields  --Adithya 29-04-2017*/
             if (!stmData.isEmpty() && !stmConData.isEmpty()) {
-                
+
                 //STM VALIDATOR OBJECT
                 ESBSTMValidator estmvalid = new ESBSTMValidator();
                 String srcfile = stmConData.get("Source File Location").toString() + "\\" + stmConData.get("*Source DB/File Name");
                 String trgfile = stmConData.get("Target File Location").toString() + "\\" + stmConData.get("*Target DB/File Name");
-                
-                if(estmvalid.checkSrcTrgFiles(srcfile, trgfile))
-                {
-                tfsrcconname.setText("FlatFile::" + stmConData.get("*Source Host Name").toString() + "::" + srcfile);
-                tftrgconname.setText("FlatFile::" + stmConData.get("*Target Host Name").toString() + "::" + trgfile);
-                stm_conTitle_txt_field.setText(stmConData.get("*Title").toString());
-                stm_conAut_txt_field.setText(stmConData.get("*Author").toString());
-                stm_conVer_txt_field.setText(stmConData.get("Version & History").toString());
-                esb_stm_tableview.setItems(stmData);
-                }
-                else
-                {
+
+                if (estmvalid.checkSrcTrgFiles(srcfile, trgfile)) {
+                    tfsrcconname.setText("FlatFile::" + stmConData.get("*Source Host Name").toString() + "::" + srcfile);
+                    tftrgconname.setText("FlatFile::" + stmConData.get("*Target Host Name").toString() + "::" + trgfile);
+                    stm_conTitle_txt_field.setText(stmConData.get("*Title").toString());
+                    stm_conAut_txt_field.setText(stmConData.get("*Author").toString());
+                    stm_conVer_txt_field.setText(stmConData.get("Version & History").toString());
+                    esb_stm_tableview.setItems(stmData);
+                } else {
                     new ExceptionUI(new Exception("[Error] Source or Target File not found! Please check"));
                 }
             }
 
         }
 
+    }
+
+    /*Method to set Columns Dynamically to the Multiple Table View --Adithya 30-04-2017*/
+    public void setTableView(TableView tableView, ObservableList<String> tableColumns) {
+        System.out.println("setTableView method Called");
+        if (!tableColumns.isEmpty()) {
+            for (String tableColumn : tableColumns) {
+                tabPane_tbl_columns = new TableColumn(tableColumn);
+                tabPane_tbl_columns.setCellValueFactory(new PropertyValueFactory(tableColumn));
+                tableView.getColumns().add(tabPane_tbl_columns);
+            }
+        } else {
+            System.out.println("(Error) No Columns Data found");
+        }
     }
 
 }

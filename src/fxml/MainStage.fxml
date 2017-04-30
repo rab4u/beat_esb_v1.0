@@ -394,42 +394,70 @@
                                                                            <tabs>
                                                                               <Tab fx:id="tabrslttotalcnt" text="Total Counts">
                                                                                  <content>
-                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                                                       <children>
+                                                                                          <TableView fx:id="totalCounts_tbl_view" prefHeight="84.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                                             <columnResizePolicy>
+                                                                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                                                             </columnResizePolicy>
+                                                                                          </TableView>
+                                                                                       </children></AnchorPane>
                                                                                  </content>
                                                                               </Tab>
                                                                               <Tab fx:id="tabrsltnullcol" text="Count of Nulls / Column">
                                                                                  <content>
-                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                                                       <children>
+                                                                                          <TableView fx:id="totalCounts_null_tbl_view" prefHeight="84.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                                                       </children></AnchorPane>
                                                                                  </content>
                                                                               </Tab>
                                                                               <Tab fx:id="tabrsltnotnullcol" text="Count of Not Nulls / Column">
                                                                                  <content>
-                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                                                       <children>
+                                                                                          <TableView fx:id="totalCountsnot_null_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                       </children></AnchorPane>
                                                                                  </content>
                                                                               </Tab>
                                                                               <Tab fx:id="tabrsltdupcol" text="Count of Duplicates / Column">
                                                                                  <content>
-                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                                                       <children>
+                                                                                          <TableView fx:id="countDupli_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                       </children></AnchorPane>
                                                                                  </content>
                                                                               </Tab>
                                                                               <Tab fx:id="tabrsltdstcol" text="Count of Distinct / Column">
                                                                                  <content>
-                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                                                       <children>
+                                                                                          <TableView fx:id="countDistinct_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                       </children></AnchorPane>
                                                                                  </content>
                                                                               </Tab>
                                                                               <Tab fx:id="tabrsltsumcol" text="Count of Numerics / Column">
                                                                                  <content>
-                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                                                       <children>
+                                                                                          <TableView fx:id="countNumerics_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                       </children></AnchorPane>
                                                                                  </content>
                                                                               </Tab>
                                                                               <Tab fx:id="tabrsltmaxcol" text="Max / Column">
                                                                                  <content>
-                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                                                       <children>
+                                                                                          <TableView fx:id="max_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                       </children></AnchorPane>
                                                                                  </content>
                                                                               </Tab>
                                                                               <Tab fx:id="tabrsltmincol" text="Min / Column">
                                                                                  <content>
-                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                                                       <children>
+                                                                                          <TableView fx:id="min_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                       </children></AnchorPane>
                                                                                  </content>
                                                                               </Tab>
                                                                            </tabs>
@@ -440,14 +468,42 @@
                                                                      <content>
                                                                         <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                                                                            <tabs>
-                                                                              <Tab text="Source Data" />
-                                                                              <Tab text="Target Data" />
+                                                                              <Tab text="Source Data">
+                                                                                 <content>
+                                                                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                                       <children>
+                                                                                          <TableView fx:id="sourceData_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                       </children>
+                                                                                    </AnchorPane>
+                                                                                 </content></Tab>
+                                                                              <Tab text="Target Data">
+                                                                                 <content>
+                                                                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                                       <children>
+                                                                                          <TableView fx:id="targetData_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                       </children>
+                                                                                    </AnchorPane>
+                                                                                 </content></Tab>
                                                                               <Tab text="Un Matched Data">
                                                                                  <content>
                                                                                     <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                                                                                        <tabs>
-                                                                                          <Tab text="Source" />
-                                                                                          <Tab text="Target" />
+                                                                                          <Tab text="Source">
+                                                                                             <content>
+                                                                                                <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                                                   <children>
+                                                                                                      <TableView fx:id="unsourceData_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                                   </children>
+                                                                                                </AnchorPane>
+                                                                                             </content></Tab>
+                                                                                          <Tab text="Target">
+                                                                                             <content>
+                                                                                                <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                                                   <children>
+                                                                                                      <TableView fx:id="unMatchtargetData_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                                   </children>
+                                                                                                </AnchorPane>
+                                                                                             </content></Tab>
                                                                                        </tabs>
                                                                                     </TabPane>
                                                                                  </content>
