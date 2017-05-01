@@ -115,6 +115,9 @@ public class CSVSQLEngine {
 
         }
         System.out.println("CSV COLUMN LIST : " + collist);
+        
+        conn.close();
+        
         return collist;
     }
     
@@ -143,6 +146,9 @@ public class CSVSQLEngine {
 
         //}
         System.out.println("CSV COLUMN TYPE : " + coltype);
+        
+        conn.close();
+        
         return coltype;
     }
 
@@ -176,6 +182,8 @@ public class CSVSQLEngine {
             System.out.println("Row [1] added " + row);
             data.add(row);
         }
+        
+        conn.close();
         
         return data;
     }
@@ -211,6 +219,8 @@ public class CSVSQLEngine {
             System.out.println("Row [1] added " + row);
             data.add(row);
         }
+        
+        conn.close();
         
         return data;
     }

@@ -30,6 +30,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -137,7 +138,7 @@ public class MainStageController implements Initializable {
     private Button autoresultrunbt;
 
     /*Code Created By the Adithya 29-04-2017 */
- /*STM Table Data */
+    /*STM Table Data */
     @FXML
     private TextField stm_conTitle_txt_field, stm_conAut_txt_field, stm_conVer_txt_field;
 
@@ -242,16 +243,16 @@ public class MainStageController implements Initializable {
         //tab selector based test scenario
         testScenTabPane.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Tab>() {
-            @Override
-            public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
+                    @Override
+                    public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
 
-                if (testScenTabPane.getSelectionModel().getSelectedItem().getText().equalsIgnoreCase("Advanced Test Scenarios")) {
-                    advanResultTabPane.getSelectionModel().select(advanResultTab);
-                } else {
-                    advanResultTabPane.getSelectionModel().select(basicResultTab);
+                        if (testScenTabPane.getSelectionModel().getSelectedItem().getText().equalsIgnoreCase("Advanced Test Scenarios")) {
+                            advanResultTabPane.getSelectionModel().select(advanResultTab);
+                        } else {
+                            advanResultTabPane.getSelectionModel().select(basicResultTab);
+                        }
+                    }
                 }
-            }
-        }
         );
 
         //setting loading images to db / ff
@@ -663,36 +664,36 @@ public class MainStageController implements Initializable {
 
         // srcsemikeycoltbl.getItems().clear();
         /*
-        try {
+         try {
            
-            String filename = nodeselect1.getValue();
-            String filetype = nodeselect1.getParent().getValue();
+         String filename = nodeselect1.getValue();
+         String filetype = nodeselect1.getParent().getValue();
 
-            getSetFileName(filename, filetype, tfsrcconname);
-            CSVSQLEngine cse = new CSVSQLEngine();
-            String ffdetails = tfsrcconname.getText().split("::")[2];
-            String qry = "Select * from " + filename.split("\\.")[0];
+         getSetFileName(filename, filetype, tfsrcconname);
+         CSVSQLEngine cse = new CSVSQLEngine();
+         String ffdetails = tfsrcconname.getText().split("::")[2];
+         String qry = "Select * from " + filename.split("\\.")[0];
 
-            List colslist = cse.getFFColumns(ffdetails, qry);
-            srccoltypes = new ArrayList();
+         List colslist = cse.getFFColumns(ffdetails, qry);
+         srccoltypes = new ArrayList();
             
-            for(Object item:colslist){
+         for(Object item:colslist){
                    
-                  System.out.println("COl NAME: "+item);
-                  srccoltypes.add(cse.getFFColumnType(ffdetails, item.toString(),filename.split("\\.")[0],false));
-            }
+         System.out.println("COl NAME: "+item);
+         srccoltypes.add(cse.getFFColumnType(ffdetails, item.toString(),filename.split("\\.")[0],false));
+         }
           
             
-            colslist.add(0, "ALL");
-            colslist.add(1,"-----------------");
-            combosrccolnames.getItems().clear();
-            combosrccolnames.getItems().addAll(colslist);
+         colslist.add(0, "ALL");
+         colslist.add(1,"-----------------");
+         combosrccolnames.getItems().clear();
+         combosrccolnames.getItems().addAll(colslist);
 
-        } catch (Exception ex) {
-            Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
-            new ExceptionUI(ex);
+         } catch (Exception ex) {
+         Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
+         new ExceptionUI(ex);
             
-        }
+         }
          */
     }
 
@@ -707,32 +708,32 @@ public class MainStageController implements Initializable {
 
         //trgsemikeycoltbl.getItems().clear();
         /*
-        try {
+         try {
 
-            String filename = nodeselect1.getValue();
-            String filetype = nodeselect1.getParent().getValue();
+         String filename = nodeselect1.getValue();
+         String filetype = nodeselect1.getParent().getValue();
 
-            getSetFileName(filename, filetype, tftrgconname);
+         getSetFileName(filename, filetype, tftrgconname);
 
-            CSVSQLEngine cse = new CSVSQLEngine();
-            String ffdetails = tftrgconname.getText().split("::")[2];
-            String qry = "Select * from " + filename.split("\\.")[0];
+         CSVSQLEngine cse = new CSVSQLEngine();
+         String ffdetails = tftrgconname.getText().split("::")[2];
+         String qry = "Select * from " + filename.split("\\.")[0];
 
-            List colslist = cse.getFFColumns(ffdetails, qry);
-            trgcoltypes = new ArrayList();
-            for (Object item : colslist) {
-                trgcoltypes.add(cse.getFFColumnType(ffdetails, item.toString(), filename.split("\\.")[0],false));
-            }
+         List colslist = cse.getFFColumns(ffdetails, qry);
+         trgcoltypes = new ArrayList();
+         for (Object item : colslist) {
+         trgcoltypes.add(cse.getFFColumnType(ffdetails, item.toString(), filename.split("\\.")[0],false));
+         }
             
-            colslist.add(0, "ALL");
-            colslist.add(1,"-----------------");
-            combotrgcolnames.getItems().clear();
-            combotrgcolnames.getItems().addAll(colslist);
+         colslist.add(0, "ALL");
+         colslist.add(1,"-----------------");
+         combotrgcolnames.getItems().clear();
+         combotrgcolnames.getItems().addAll(colslist);
 
-        } catch (Exception ex) {
-            Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
-            new ExceptionUI(ex);
-        }
+         } catch (Exception ex) {
+         Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
+         new ExceptionUI(ex);
+         }
          */
     }
 
@@ -1071,14 +1072,13 @@ public class MainStageController implements Initializable {
         bSrcTran.saveFinalSourceFile(srcfile);
         bSrcTran.saveFinalTargetFile(trgfile);
 
-        tfsrcconname.setText(tfsrcconname.getText().replace(".csv", "_final.csv"));
-        tftrgconname.setText(tftrgconname.getText().replace(".txt", "_final.csv"));
+        if (!tfsrcconname.getText().contains("_final")) {
+            tfsrcconname.setText(tfsrcconname.getText().replace(".csv", "_final.csv"));
+            tftrgconname.setText(tftrgconname.getText().replace(".txt", "_final.csv"));
+        }
 
         progstatus_label.setText("Applying Source Transformations on Input File Completed");
         progressCompletedImage();
-
-        progstatus_label.setText("Generating Test Plan...");
-        progressLoadingImage();
 
         QueryGenerator qgen = new QueryGenerator();
 
@@ -1094,274 +1094,239 @@ public class MainStageController implements Initializable {
         cmpl_data_tesplan = new HashMap<String, String>();
         last_1000_testplan = new HashMap<String, String>();
 
-        //System.out.println(this.getConnNameFromUI("src"));
-        // System.out.println(this.getConnNameFromUI("trg"));
-        //get column names
         List src_table = cssqleng.getFFColumns(this.getConnNameFromUI("src"), "select * from " + this.getTableNameFromUI("src"));
         List trg_table = cssqleng.getFFColumns(this.getConnNameFromUI("trg"), "select * from " + this.getTableNameFromUI("trg"));
 
-//        System.out.println("SRC Col: "+src_table);
-//        System.out.println("Trg Col"+trg_table);
-        for (Object item : ll) {
+        Task task = new Task<Void>() {
+            @Override
+            public Void call() {
+				//non ui code
 
-            if (item.toString().equals("total_cnts")) {
+                for (Object item : ll) {
 
-                if (this.getSourceType().equalsIgnoreCase("ff")) {
-                    total_cnt_testplan.put("Total_Cnt_Src_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src")).replace(".", ""));
-                } else {
-                    total_cnt_testplan.put("Total_Cnt_Src_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src")));
-                }
+                    if (item.toString().equals("total_cnts")) {
 
-                if (this.getTargetType().equalsIgnoreCase("ff")) {
-                    total_cnt_testplan.put("Total_Cnt_Trg_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg")).replace(".", ""));
-                } else {
-                    total_cnt_testplan.put("Total_Cnt_Trg_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg")));
-                }
+                        if (getSourceType().equalsIgnoreCase("ff")) {
+                            total_cnt_testplan.put("Total_Cnt_Src_Testcase", qgen.getTotalCntQueries(getDBNameFromUI("src"), getTableNameFromUI("src")).replace(".", ""));
+                        } else {
+                            total_cnt_testplan.put("Total_Cnt_Src_Testcase", qgen.getTotalCntQueries(getDBNameFromUI("src"), getTableNameFromUI("src")));
+                        }
 
-                System.out.println("Count Test Plan :" + total_cnt_testplan);
+                        if (getTargetType().equalsIgnoreCase("ff")) {
+                            total_cnt_testplan.put("Total_Cnt_Trg_Testcase", qgen.getTotalCntQueries(getDBNameFromUI("trg"), getTableNameFromUI("trg")).replace(".", ""));
+                        } else {
+                            total_cnt_testplan.put("Total_Cnt_Trg_Testcase", qgen.getTotalCntQueries(getDBNameFromUI("trg"), getTableNameFromUI("trg")));
+                        }
 
-            }
+                        System.out.println("Count Test Plan :" + total_cnt_testplan);
 
-            if (item.toString().equals("null_cnts")) {
+                    }
 
-                //src and trg
-                for (int i = 0; i < src_table.size(); i++) {
+                    if (item.toString().equals("null_cnts")) {
 
-                    String row = src_table.get(i).toString();
-                    null_cnt_testplan.put("Null_Cnt_Src_Testcase_" + i, qgen.getNullCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), row, this.getSourceType()));
-                    row = trg_table.get(i).toString();
-                    null_cnt_testplan.put("Null_Cnt_Trg_Testcase_" + i, qgen.getNullCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"), row, this.getTargetType()));
-                }
-                System.out.println("Null Count Test Plan :" + null_cnt_testplan);
-            }
+                        //src and trg
+                        for (int i = 0; i < src_table.size(); i++) {
 
-            if (item.toString().equals("not_null_cnts")) {
+                            String row = src_table.get(i).toString();
+                            null_cnt_testplan.put("Null_Cnt_Src_Testcase_" + i, qgen.getNullCntQueries(getDBNameFromUI("src"), getTableNameFromUI("src"), row, getSourceType()));
+                            row = trg_table.get(i).toString();
+                            null_cnt_testplan.put("Null_Cnt_Trg_Testcase_" + i, qgen.getNullCntQueries(getDBNameFromUI("trg"), getTableNameFromUI("trg"), row, getTargetType()));
+                        }
+                        System.out.println("Null Count Test Plan :" + null_cnt_testplan);
+                    }
 
-                //src and trg
-                for (int i = 0; i < src_table.size(); i++) {
+                    if (item.toString().equals("not_null_cnts")) {
 
-                    String row = src_table.get(i).toString();
+                        //src and trg
+                        for (int i = 0; i < src_table.size(); i++) {
 
-                    notnull_cnt_testplan.put("NotNull_Cnt_Src_Testcase_" + i, qgen.getNotNullCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), row, this.getSourceType()));
+                            String row = src_table.get(i).toString();
 
-                    row = trg_table.get(i).toString();
+                            notnull_cnt_testplan.put("NotNull_Cnt_Src_Testcase_" + i, qgen.getNotNullCntQueries(getDBNameFromUI("src"), getTableNameFromUI("src"), row, getSourceType()));
 
-                    notnull_cnt_testplan.put("NotNull_Cnt_Trg_Testcase_" + i, qgen.getNotNullCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"), row, this.getTargetType()));
+                            row = trg_table.get(i).toString();
 
-                }
+                            notnull_cnt_testplan.put("NotNull_Cnt_Trg_Testcase_" + i, qgen.getNotNullCntQueries(getDBNameFromUI("trg"), getTableNameFromUI("trg"), row, getTargetType()));
 
-                System.out.println("Not Null Count Test Plan :" + notnull_cnt_testplan);
+                        }
 
-            }
+                        System.out.println("Not Null Count Test Plan :" + notnull_cnt_testplan);
 
-            if (item.toString().equals("dst_cnts")) {
+                    }
 
-                //src and trg
-                for (int i = 0; i < src_table.size(); i++) {
+                    if (item.toString().equals("dst_cnts")) {
 
-                    String row = src_table.get(i).toString();
+                        //src and trg
+                        for (int i = 0; i < src_table.size(); i++) {
 
-                    dst_cnt_testplan.put("Dst_Cnt_Src_Testcase_" + i, qgen.getDistinctCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), row, this.getSourceType()));
+                            String row = src_table.get(i).toString();
 
-                    row = trg_table.get(i).toString();
+                            dst_cnt_testplan.put("Dst_Cnt_Src_Testcase_" + i, qgen.getDistinctCntQueries(getDBNameFromUI("src"), getTableNameFromUI("src"), row, getSourceType()));
 
-                    dst_cnt_testplan.put("Dst_Cnt_Trg_Testcase_" + i, qgen.getDistinctCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"), row, this.getTargetType()));
+                            row = trg_table.get(i).toString();
 
-                }
+                            dst_cnt_testplan.put("Dst_Cnt_Trg_Testcase_" + i, qgen.getDistinctCntQueries(getDBNameFromUI("trg"), getTableNameFromUI("trg"), row, getTargetType()));
 
-                System.out.println("Distinct Count Test Plan :" + dst_cnt_testplan);
+                        }
 
-            }
+                        System.out.println("Distinct Count Test Plan :" + dst_cnt_testplan);
 
-            if (item.toString().equals("dup_cnts")) {
+                    }
+
+                    if (item.toString().equals("dup_cnts")) {
 
                 //Check in the Distinct Duplicates
-                //src and trg
-                for (int i = 0; i < src_table.size(); i++) {
+                        //src and trg
+                        for (int i = 0; i < src_table.size(); i++) {
 
-                    String row = src_table.get(i).toString();
+                            String row = src_table.get(i).toString();
 
-                    dup_cnt_testplan.put("Dup_Cnt_Src_Testcase_" + i, qgen.getDistinctCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), row, this.getSourceType()));
+                            dup_cnt_testplan.put("Dup_Cnt_Src_Testcase_" + i, qgen.getDistinctCntQueries(getDBNameFromUI("src"), getTableNameFromUI("src"), row, getSourceType()));
 
-                    row = trg_table.get(i).toString();
+                            row = trg_table.get(i).toString();
 
-                    dup_cnt_testplan.put("Dup_Cnt_Trg_Testcase_" + i, qgen.getDistinctCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"), row, this.getTargetType()));
+                            dup_cnt_testplan.put("Dup_Cnt_Trg_Testcase_" + i, qgen.getDistinctCntQueries(getDBNameFromUI("trg"), getTableNameFromUI("trg"), row, getTargetType()));
 
-                }
+                        }
 
-                System.out.println("Duplicate Count Test Plan :" + dup_cnt_testplan);
+                        System.out.println("Duplicate Count Test Plan :" + dup_cnt_testplan);
 
-            }
+                    }
 
-            if (item.toString().equals("max_cols")) {
+                    if (item.toString().equals("max_cols")) {
 
-                //src and trg
-                for (int i = 0; i < src_table.size(); i++) {
+                        //src and trg
+                        for (int i = 0; i < src_table.size(); i++) {
 
-                    String row = src_table.get(i).toString();
+                            String row = src_table.get(i).toString();
 
-                    max_col_testplan.put("Max_Col_Src_Testcase_" + i, qgen.getMaxColQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), row, this.getSourceType()));
+                            max_col_testplan.put("Max_Col_Src_Testcase_" + i, qgen.getMaxColQueries(getDBNameFromUI("src"), getTableNameFromUI("src"), row, getSourceType()));
 
-                    row = trg_table.get(i).toString();
+                            row = trg_table.get(i).toString();
 
-                    max_col_testplan.put("Max_Col_Trg_Testcase_" + i, qgen.getMaxColQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"), row, this.getTargetType()));
+                            max_col_testplan.put("Max_Col_Trg_Testcase_" + i, qgen.getMaxColQueries(getDBNameFromUI("trg"), getTableNameFromUI("trg"), row, getTargetType()));
 
-                }
+                        }
 
-                System.out.println("Max of Col Test Plan :" + max_col_testplan);
+                        System.out.println("Max of Col Test Plan :" + max_col_testplan);
 
-            }
+                    }
 
-            if (item.toString().equals("min_cols")) {
+                    if (item.toString().equals("min_cols")) {
 
                 //ObservableList src_table = srcsemikeycoltbl.getItems();
-                //ObservableList trg_table = trgsemikeycoltbl.getItems();
-                List testcase = new ArrayList();
+                        //ObservableList trg_table = trgsemikeycoltbl.getItems();
+                        List testcase = new ArrayList();
 
-                //src and trg
-                for (int i = 0; i < src_table.size(); i++) {
+                        //src and trg
+                        for (int i = 0; i < src_table.size(); i++) {
 
-                    String row = src_table.get(i).toString();
+                            String row = src_table.get(i).toString();
 
-                    min_col_testplan.put("Min_Col_Src_Testcase_" + i, qgen.getMinColQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), row, this.getSourceType()));
+                            min_col_testplan.put("Min_Col_Src_Testcase_" + i, qgen.getMinColQueries(getDBNameFromUI("src"), getTableNameFromUI("src"), row, getSourceType()));
 
-                    row = trg_table.get(i).toString();
+                            row = trg_table.get(i).toString();
 
-                    min_col_testplan.put("Min_Col_Trg_Testcase_" + i, qgen.getMinColQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"), row, this.getTargetType()));
+                            min_col_testplan.put("Min_Col_Trg_Testcase_" + i, qgen.getMinColQueries(getDBNameFromUI("trg"), getTableNameFromUI("trg"), row, getTargetType()));
+
+                        }
+
+                        System.out.println("Min of Col Test Plan :" + min_col_testplan);
+
+                    }
+
+                    if (item.toString().equals("sum_num_cols")) {
+
+                        //src and trg
+                        for (int i = 0; i < src_table.size(); i++) {
+
+                            String row = src_table.get(i).toString();
+
+                            String qry = qgen.getSumColQueries(getDBNameFromUI("src"), getTableNameFromUI("src"), row, getSourceType());
+
+                            if (!qry.equals("")) {
+
+                                sum_num_testplan.put("Sum_Col_Src_Testcase_" + i, qry);
+
+                            }
+                            row = trg_table.get(i).toString();
+
+                            qry = qgen.getSumColQueries(getDBNameFromUI("trg"), getTableNameFromUI("trg"), row, getTargetType());
+
+                            if (!qry.equals("")) {
+
+                                sum_num_testplan.put("Sum_Col_Trg_Testcase_" + i, qry);
+
+                            }
+                        }
+
+                        System.out.println("Sum of Col Test Plan :" + sum_num_testplan);
+
+                    }
+
+                    /*Fetch the Complete records */
+                    if (item.toString().equals("cmpl_data")) {
+
+                        for (int i = 0; i < src_table.size(); i++) {
+
+                            String row = src_table.get(i).toString();
+
+                            String qry = qgen.getCmplDataQueries(getDBNameFromUI("src"), getTableNameFromUI("src"), row, getSourceType(), src_table);
+
+                            if (!qry.equals("")) {
+
+                                cmpl_data_tesplan.put("Compl_Data_Src_Testcase", qry);
+
+                            }
+                            row = trg_table.get(i).toString();
+
+                            qry = qgen.getCmplDataQueries(getDBNameFromUI("trg"), getTableNameFromUI("trg"), row, getTargetType(), trg_table);
+
+                            if (!qry.equals("")) {
+
+                                cmpl_data_tesplan.put("Compl_Data_Trg_Testcase", qry);
+
+                            }
+                        }
+
+                        System.out.println("Complete Data :" + cmpl_data_tesplan);
+
+                    }
 
                 }
 
-                System.out.println("Min of Col Test Plan :" + min_col_testplan);
-
-            }
-
-            if (item.toString().equals("sum_num_cols")) {
-
-                //src and trg
-                for (int i = 0; i < src_table.size(); i++) {
-
-                    String row = src_table.get(i).toString();
-
-                    String qry = qgen.getSumColQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), row, this.getSourceType());
-
-                    if (!qry.equals("")) {
-
-                        sum_num_testplan.put("Sum_Col_Src_Testcase_" + i, qry);
-
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        //ui code
+                        progstatus_label.setText("Generating Test Plan");
+                        progressLoadingImage();
+                        
                     }
-                    row = trg_table.get(i).toString();
+                });
+                return null;
+            }
+        };
 
-                    qry = qgen.getSumColQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"), row, this.getTargetType());
-
-                    if (!qry.equals("")) {
-
-                        sum_num_testplan.put("Sum_Col_Trg_Testcase_" + i, qry);
-
-                    }
-                }
-
-                System.out.println("Sum of Col Test Plan :" + sum_num_testplan);
+        task.setOnRunning(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
 
             }
+        });
 
-            /*Fetch the Complete records */
-            if (item.toString().equals("cmpl_data")) {
-
-                for (int i = 0; i < src_table.size(); i++) {
-
-                    String row = src_table.get(i).toString();
-
-                    String qry = qgen.getCmplDataQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), row, this.getSourceType(), src_table);
-
-                    if (!qry.equals("")) {
-
-                        cmpl_data_tesplan.put("Compl_Data_Src_Testcase", qry);
-
-                    }
-                    row = trg_table.get(i).toString();
-
-                    qry = qgen.getCmplDataQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"), row, this.getTargetType(), trg_table);
-
-                    if (!qry.equals("")) {
-
-                        cmpl_data_tesplan.put("Compl_Data_Trg_Testcase", qry);
-
-                    }
-                }
-
-                System.out.println("Complete Data :" + cmpl_data_tesplan);
-
-            }
-
-            /*Fetch First 1000 Records */
-            if (item.toString().equals("frst_1000")) {
-                for (int i = 0; i < src_table.size(); i++) {
-
-                    String row = src_table.get(i).toString();
-
-                    String qry = qgen.getFrst1000Queries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), row, this.getSourceType(), srcCol, src_table);
-
-                    if (!qry.equals("")) {
-
-                        cmpl_data_tesplan.put("Frst_1000_Src_Testcase", qry);
-
-                    }
-                    row = trg_table.get(i).toString();
-
-                    qry = qgen.getFrst1000Queries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"), row, this.getTargetType(), trgCol, trg_table);
-
-                    if (!qry.equals("")) {
-
-                        frst_1000_testplan.put("Frst_1000_Trg_Testcase", qry);
-
-                    }
-                }
-
-                System.out.println("First 1000 Data :" + frst_1000_testplan);
-
-            }
-
-            /*Fetch last 1000 Records */
-            if (item.toString().equals("lst_1000")) {
-//                for (int i = 0; i < src_table.size(); i++) {
-//
-//                    String row = src_table.get(i).toString();
-//
-//                    String qry = qgen.getFrst1000Queries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), row, this.getSourceType(), srcCol);
-//
-//                    if (!qry.equals("")) {
-//
-//                        cmpl_data_tesplan.put("Last_1000_Src_Testcase", qry);
-//
-//                    }
-//                    row = trg_table.get(i).toString();
-//
-//                    qry = qgen.getFrst1000Queries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"), row, this.getTargetType(), trgCol);
-//
-//                    if (!qry.equals("")) {
-//
-//                        frst_1000_testplan.put("Last_1000_Trg_Testcase", qry);
-//
-//                    }
-//                }
-
-                System.out.println("Last 1000 Data :" + frst_1000_testplan);
-
-            }
-
-            /*Fetch the incr data */
-            if (item.toString().equals("incr_data")) {
-
-            }
-
-            /*Fetch the schdeule data */
-            if (item.toString().equals("schl_test")) {
-
-            }
-        }
-
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                
         progstatus_label.setText("Test Plan Generated");
-        progressCompletedImage();
+                progressCompletedImage();
+            }
+        });
+
+        Thread t = new Thread(task);
+        t.setDaemon(true);
+        t.start();
+
 
     }
 
