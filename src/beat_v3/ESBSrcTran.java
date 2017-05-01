@@ -1,6 +1,7 @@
 package beat_v3;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -20,10 +21,13 @@ public class ESBSrcTran {
 
     private ObservableList<ESBStmBean> esbStmData;
     private CSVSQLEngine csvengine;
-//Final Table Rows for each order number
+    //Final Table Rows for each order number
     private ObservableList<ObservableList<String>> input_file_final = FXCollections.observableArrayList();
     //Set for the Order Number
     private ObservableSet indiOrdernum = FXCollections.observableSet();
+
+    //List for the Date Transformation
+    ObservableList<String> dateTrans = FXCollections.observableArrayList();
     //List for the 
 
     ObservableList<String> inp = FXCollections.observableArrayList();
@@ -35,6 +39,7 @@ public class ESBSrcTran {
 
     }
 
+    /*Appling the STM Transformation Rule  */
     public void applySRCTran(String srcfile) throws Exception {
 
         System.out.println("applySRCTran - called");
@@ -81,13 +86,11 @@ public class ESBSrcTran {
                             if (col != null) {
                                 for (String string : col) {
                                     String ds = string.substring(Integer.parseInt(stmPropTransRul1.split(",")[0]), Integer.parseInt(stmPropTransRul1.split(",")[1]));
-//                                    System.out.println("Sub String: " + ds);
-
                                     indiOrdernum.add(ds);
                                 }
                             } else {
                                 String ds = o.toString().substring(Integer.parseInt(stmPropTransRul1.split(",")[0] + 1), Integer.parseInt(stmPropTransRul1.split(",")[1] + 1));
-//                                System.out.println("Sub String: " + ds);
+
                                 indiOrdernum.add(ds);
                             }
 
@@ -96,6 +99,7 @@ public class ESBSrcTran {
                     }
 
                 }
+                dateTrans.add(null);
 
                 /* Getting the Data for the order number */
                 System.out.println("Order Number: " + indiOrdernum.size());
@@ -116,48 +120,12 @@ public class ESBSrcTran {
                 stmSrcFieldname = eSBStmBean.getSourceFieldName().replace(" ", "");
                 stmPropTransRul = eSBStmBean.getProposedTransRule().split("[\"]")[1];
                 System.out.println("[INFO] Source Field : " + stmSrcFieldname + " Transformation : " + stmPropTransRul);
-//                System.out.println(input_file_final.get(0).toString().indexOf(stmSrcFieldname));
-                System.out.println("Inp date:" + inp.size());
+                System.out.println("Size of the Final: " + input_file_final.size());
+                dateTrans.add(stmPropTransRul);
 
-                for (Object object : input_file_final) {
-                    ObservableList dd = (ObservableList) object;
-                    String[] singleData = dd.toString().split(",");
-
-                    for (int i = 0; i < singleData.length; i++) {
-
-                        String data_check = singleData[i].replaceAll(" ", "");
-//                        String data_check1 = singleData[i+1].replace(" ", "");
-                        if (data_check.matches("[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,4}[0-9]{1,2}:[0-9]{1,2}(am|pm)")) {// && data_check1.matches("[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,4}[0-9]{1,2}:[0-9]{1,2}(am|pm)") && data_check.equalsIgnoreCase(data_check1)) {
-//                            singleData[i] = singleData
-                            Date d = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(singleData[i]);
-                            singleData[i] = new SimpleDateFormat(stmPropTransRul).format(d);
-
-//                            System.out.println("Check VAlid: " + singleData[i]);
-                        }
-//                        }
-                    }
-                    StringBuffer buffer = new StringBuffer();
-
-                    for (int i = 0; i < singleData.length; i++) {
-
-                        if (i < singleData.length - 1) {
-                            buffer.append(singleData[i] + ",");
-                        } else {
-                            buffer.append(singleData[i]);
-                        }
-                    }
-//                    System.out.println(buffer.toString());
-//                    date.add(buffer.toString());
-                        object = buffer.toString();
-
-                }
-//                input_file_final.clear();
-//                input_file_final.addAll(date);
-//                inp.clear();
-//                System.out.println(inp);
             } else if (eSBStmBean.getProposedTransRule().contains("replace")) {
                 /* Transformation for the Replace */
-
+                dateTrans.add(null);
                 stmSrcFieldname = eSBStmBean.getSourceFieldName().replace(" ", "");
                 stmPropTransRul = eSBStmBean.getProposedTransRule().substring(26, 45);
                 System.out.println("[INFO] Source Field : " + stmSrcFieldname + " Transformation : " + stmPropTransRul);
@@ -165,7 +133,7 @@ public class ESBSrcTran {
                 System.out.println("Inp replace:" + inp.size());
                 for (Object object : input_file_final) {
                     ObservableList dd = (ObservableList) object;
-//                    System.out.println("Dat: " + dd);
+
                     String[] singleData = dd.toString().split(",");
 
                     for (int i = 0; i < singleData.length; i++) {
@@ -185,19 +153,20 @@ public class ESBSrcTran {
                         }
                     }
                     System.out.println(buffer.toString());
-//                    inp.add(buffer.toString());
-                    object = buffer.toString();
+                    dd.clear();
+                    dd.add(buffer.toString());
+
                     System.out.println("index: " + object);
                     System.out.println("DDA: " + dd);
                 }
 
-//                System.out.println(inp);
-//                input_file_final.clear();
-//                input_file_final.add(inp);
+            } else {
+                dateTrans.add(null);
             }
 
-//            inp.clear();
         }
+
+        getDateTransformation();
 
     }
 
@@ -206,11 +175,50 @@ public class ESBSrcTran {
         for (Object o : input_file_final) {
             ObservableList<String> od = (ObservableList) o;
 
-//            for (String string : od) {
-                System.out.println("Final: " + od);
-//            }
-//
+            System.out.println("Final: " + od.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+
         }
 
+    }
+
+    /* Date Transformation --Adithya */
+    public void getDateTransformation() throws ParseException {
+        System.out.println("Date Tran Sie: " + dateTrans);
+        for (Object object : input_file_final) {
+
+            ObservableList dd = (ObservableList) object;
+            String[] singleData = dd.toString().split(",");
+            System.out.println(singleData.length);
+            for (int i = 0, m = 0; i < singleData.length; i++, m++) {
+
+                String data_check = singleData[i].replaceAll(" ", "");
+                System.out.println("Data: " + data_check);
+                System.out.println("Transformation Rule: " + dateTrans.get(m));
+
+                if (data_check.matches("[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,4}[0-9]{1,2}:[0-9]{1,2}(am|pm)")) {
+
+                    System.out.println("Transformation Rule: " + dateTrans.get(m));
+                    Date d = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(singleData[i]);
+                    System.out.println("Date: " + d);
+                    singleData[i] = new SimpleDateFormat(dateTrans.get(m)).format(d);
+                    System.out.println("Date Time : " + singleData[i]);
+
+                }
+
+            }
+            StringBuffer buffer = new StringBuffer();
+
+            for (int j = 0; j < singleData.length; j++) {
+
+                if (j < singleData.length - 1) {
+                    buffer.append(singleData[j] + ",");
+                } else {
+                    buffer.append(singleData[j]);
+                }
+            }
+            dd.clear();
+            dd.add(buffer.toString());
+
+        }
     }
 }

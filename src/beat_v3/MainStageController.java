@@ -1288,7 +1288,7 @@ public class MainStageController implements Initializable {
                     //applying Transformation and to the source file
                     ESBSrcTran bSrcTran = new ESBSrcTran(stmData);
                     bSrcTran.applySRCTran(srcfile);
-                    bSrcTran.chechFinal();
+                    bSrcTran.chechFinal();// Data Check
 
                 } else {
                     new ExceptionUI(new Exception("[Error] Source or Target File not found! Please check"));
