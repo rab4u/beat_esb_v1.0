@@ -1,6 +1,9 @@
 package beat_v3;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,6 +36,10 @@ public class ESBSrcTran {
     ObservableList<String> inp = FXCollections.observableArrayList();
     ObservableList<String> date = FXCollections.observableArrayList();
 
+    StringBuffer srcHeader = new StringBuffer();
+
+    private String header = "OrderNumber,PrimaryReference,BOL,ActualShip,ActualDelivery,CarrierCharge,CarrierCurrency,CarrierDistance,CarrierMode,CarrierName,CarrierSCAC,CreateBy,CreateDate,PRO,Status,TargetShipEarly,TargetShipLate,TargetDeliveryEarly,TargetDeliveryLate,UpdateDate";
+
     public ESBSrcTran(ObservableList<ESBStmBean> esbStmData) {
         this.esbStmData = esbStmData;
         csvengine = new CSVSQLEngine();
@@ -43,8 +50,14 @@ public class ESBSrcTran {
     public void applySRCTran(String srcfile) throws Exception {
 
         System.out.println("applySRCTran - called");
+        int dataPos = 0;
 
         for (ESBStmBean eSBStmBean : esbStmData) {
+            if (++dataPos < esbStmData.size()) {
+                srcHeader.append(eSBStmBean.getSourceFieldName().replaceAll(" ", "").trim() + "_" + eSBStmBean.getTargetFieldName().replaceAll(" ", "").trim() + ",");
+            } else {
+                srcHeader.append(eSBStmBean.getSourceFieldName().replaceAll(" ", "").trim() + "_" + eSBStmBean.getTargetFieldName().replaceAll(" ", "").trim());
+            }
             String stmSrcFieldname = null;
             String stmPropTransRul = null;
             if (eSBStmBean.getProposedTransRule().contains("split")) {
@@ -61,8 +74,6 @@ public class ESBSrcTran {
 
                 System.out.println("[INFO] sql : " + sql);
 
-                String header = "OrderNumber,PrimaryReference,BOL,ActualShip,ActualDelivery,CarrierCharge,CarrierCurrency,CarrierDistance,CarrierMode,CarrierName,CarrierSCAC,CreateBy,CreateDate,PRO,Status,TargetShipEarly,TargetShipLate,TargetDeliveryEarly,TargetDeliveryLate,UpdateDate";
-
                 ObservableList rowData = csvengine.getFFTableData(srcfile, sql, header);
 
                 rowData.remove(0);
@@ -70,8 +81,6 @@ public class ESBSrcTran {
                 /*Data Transformation Code --Adithya */
 
                 for (Object o : rowData) {
-
-                    System.out.println("Final Table : " + input_file_final.size());
 
                     String[] col = null;
                     for (String s : transRules) {
@@ -85,13 +94,15 @@ public class ESBSrcTran {
 
                             if (col != null) {
                                 for (String string : col) {
-                                    String ds = string.substring(Integer.parseInt(stmPropTransRul1.split(",")[0]), Integer.parseInt(stmPropTransRul1.split(",")[1]));
+                                    String ds = string.replaceAll("\\[", "").replaceAll("\\]", "").substring(Integer.parseInt(stmPropTransRul1.split(",")[0]), Integer.parseInt(stmPropTransRul1.split(",")[1]));
                                     indiOrdernum.add(ds);
+                                    System.out.println("order Num: " + ds + " : " + col);
                                 }
                             } else {
-                                String ds = o.toString().substring(Integer.parseInt(stmPropTransRul1.split(",")[0] + 1), Integer.parseInt(stmPropTransRul1.split(",")[1] + 1));
+                                String ds = o.toString().replaceAll("\\[", "").replaceAll("\\]", "").substring(Integer.parseInt(stmPropTransRul1.split(",")[0]), Integer.parseInt(stmPropTransRul1.split(",")[1]));
 
                                 indiOrdernum.add(ds);
+                                System.out.println("order Num: " + ds + " : " + col);
                             }
 
                         }
@@ -102,8 +113,6 @@ public class ESBSrcTran {
                 dateTrans.add(null);
 
                 /* Getting the Data for the order number */
-                System.out.println("Order Number: " + indiOrdernum.size());
-                /* Total Data from the File */
                 for (Object row : indiOrdernum) {
                     ObservableList collist1 = null;
                     String sql1 = "select '" + row.toString() + "',PrimaryReference,BOL,ActualShip,ActualShip,ActualDelivery,ActualDelivery,CarrierCharge,CarrierCurrency,CarrierDistance,CarrierMode,CarrierName,CarrierSCAC,CreateBy,CreateDate,PRO,Status,TargetShipEarly,TargetShipEarly,TargetShipLate,TargetShipLate,TargetDeliveryEarly,TargetDeliveryEarly,TargetDeliveryLate,TargetDeliveryLate from " + filename + " where OrderNumber like '%" + row.toString() + "%'";
@@ -112,7 +121,6 @@ public class ESBSrcTran {
                     collist1 = csvengine.getFFTableData(srcfile, sql1, header);
 
                     input_file_final.add(collist1);
-                    System.out.println("Final order data: " + input_file_final.size());
 
                 }
             } else if (eSBStmBean.getProposedTransRule().contains("date")) {
@@ -120,7 +128,7 @@ public class ESBSrcTran {
                 stmSrcFieldname = eSBStmBean.getSourceFieldName().replace(" ", "");
                 stmPropTransRul = eSBStmBean.getProposedTransRule().split("[\"]")[1];
                 System.out.println("[INFO] Source Field : " + stmSrcFieldname + " Transformation : " + stmPropTransRul);
-                System.out.println("Size of the Final: " + input_file_final.size());
+
                 dateTrans.add(stmPropTransRul);
 
             } else if (eSBStmBean.getProposedTransRule().contains("replace")) {
@@ -129,8 +137,7 @@ public class ESBSrcTran {
                 stmSrcFieldname = eSBStmBean.getSourceFieldName().replace(" ", "");
                 stmPropTransRul = eSBStmBean.getProposedTransRule().substring(26, 45);
                 System.out.println("[INFO] Source Field : " + stmSrcFieldname + " Transformation : " + stmPropTransRul);
-                System.out.println("Final: " + input_file_final.size());
-                System.out.println("Inp replace:" + inp.size());
+
                 for (Object object : input_file_final) {
                     ObservableList dd = (ObservableList) object;
 
@@ -147,35 +154,48 @@ public class ESBSrcTran {
                     for (int i = 0; i < singleData.length; i++) {
 
                         if (i < singleData.length - 1) {
-                            buffer.append(singleData[i] + ",");
+                            buffer.append(singleData[i].trim() + ",");
                         } else {
-                            buffer.append(singleData[i]);
+                            buffer.append(singleData[i].trim());
                         }
                     }
                     System.out.println(buffer.toString());
                     dd.clear();
-                    dd.add(buffer.toString());
+                    dd.add(buffer.toString().trim());
 
-                    System.out.println("index: " + object);
-                    System.out.println("DDA: " + dd);
                 }
 
+            } else if (eSBStmBean.getProposedTransRule().contains("Constant")) {
+                dateTrans.add(null);
+
+                for (Object o : input_file_final) {
+                    ObservableList<String> od = (ObservableList) o;
+                    StringBuffer s = new StringBuffer(od.toString()).append("," + eSBStmBean.getProposedTransRule().replaceAll("\\[", "").replaceAll("\\]", "").split("[\"]")[1]);
+                    System.out.println("Data: " + s);
+                    od.clear();
+                    od.add(s.toString());
+
+                }
             } else {
                 dateTrans.add(null);
             }
 
         }
 
-        getDateTransformation();
+        if (!input_file_final.isEmpty()) {
+            getDateTransformation();
+        }
 
     }
 
-    public void chechFinal() {
-        System.out.println("Final: " + input_file_final.size());
+    /*Printing the Final List Data --Adithya  */
+    public void printFinalData() {
+        System.out.println("printFinalData called");
+//        System.out.println("Final: " + input_file_final.size());
         for (Object o : input_file_final) {
             ObservableList<String> od = (ObservableList) o;
 
-            System.out.println("Final: " + od.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+            System.out.println("Final: " + od.toString().replaceAll("\\[", "").replaceAll("\\]", "").trim());
 
         }
 
@@ -183,7 +203,7 @@ public class ESBSrcTran {
 
     /* Date Transformation --Adithya */
     public void getDateTransformation() throws ParseException {
-        System.out.println("Date Tran Sie: " + dateTrans);
+        System.out.println("getDateTransformation called");
         for (Object object : input_file_final) {
 
             ObservableList dd = (ObservableList) object;
@@ -191,16 +211,16 @@ public class ESBSrcTran {
             System.out.println(singleData.length);
             for (int i = 0, m = 0; i < singleData.length; i++, m++) {
 
-                String data_check = singleData[i].replaceAll(" ", "");
-                System.out.println("Data: " + data_check);
-                System.out.println("Transformation Rule: " + dateTrans.get(m));
+                String data_check = singleData[i].replaceAll(" ", "").replaceAll("\\[", "").replaceAll("\\]", "").trim();
 
                 if (data_check.matches("[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,4}[0-9]{1,2}:[0-9]{1,2}(am|pm)")) {
 
                     System.out.println("Transformation Rule: " + dateTrans.get(m));
-                    Date d = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(singleData[i]);
-                    System.out.println("Date: " + d);
+                    String da = singleData[i].replaceAll("\\[", "").replaceAll("\\]", "");
+                    System.out.println("Date: " + da);
+                    Date d = new SimpleDateFormat("MM/dd/yyyy hh:mma").parse(da);
                     singleData[i] = new SimpleDateFormat(dateTrans.get(m)).format(d);
+
                     System.out.println("Date Time : " + singleData[i]);
 
                 }
@@ -211,14 +231,39 @@ public class ESBSrcTran {
             for (int j = 0; j < singleData.length; j++) {
 
                 if (j < singleData.length - 1) {
-                    buffer.append(singleData[j] + ",");
+                    buffer.append(singleData[j].trim() + ",");
                 } else {
-                    buffer.append(singleData[j]);
+                    buffer.append(singleData[j].trim());
                 }
             }
             dd.clear();
             dd.add(buffer.toString());
 
         }
+    }
+
+    public void saveTargetFile(String trgtFile) throws FileNotFoundException, IOException {
+        File file = new File(trgtFile);
+        String filename = file.getName().substring(0, file.getName().lastIndexOf('.'));
+        System.out.println("saveTargetFile called: " + filename);
+        System.out.println("File Path: " + file.getParent());
+        File saveFile = new File(file.getParent() + "\\" + filename + "_final.csv");
+        System.out.println("Header: " + srcHeader);
+        FileOutputStream fileOutputStream = new FileOutputStream(saveFile);
+        fileOutputStream.write(srcHeader.toString().getBytes());
+        fileOutputStream.write("\n".getBytes());
+        for (Object o : input_file_final) {
+            ObservableList<String> od = (ObservableList) o;
+            System.out.println("Inserting the Data");
+//            System.out.println("Final: " + od.toString().replaceAll("\\[", "").replaceAll("\\]", "").trim());?
+
+            fileOutputStream.write(od.toString().replaceAll("\\[", "").replaceAll("\\]", "").trim().getBytes());
+            fileOutputStream.write("\n".getBytes());
+
+        }
+        fileOutputStream.close();
+
+        System.out.println("File Closed after insertion");
+
     }
 }
