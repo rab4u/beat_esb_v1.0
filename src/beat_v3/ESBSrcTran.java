@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,7 +53,7 @@ public class ESBSrcTran {
     /*Appling the STM Transformation Rule  */
     public void applySRCTran(String srcfile) throws Exception {
 
-        System.out.println("applySRCTran - called");
+        System.out.println("applySRCTran - called: " + esbStmData.size());
         int dataPos = 0;
 
         for (ESBStmBean eSBStmBean : esbStmData) {
@@ -242,7 +246,8 @@ public class ESBSrcTran {
         }
     }
 
-    public void saveTargetFile(String trgtFile) throws FileNotFoundException, IOException {
+    public void saveFinalSourceFile(String trgtFile) throws FileNotFoundException, IOException {
+
         File file = new File(trgtFile);
         String filename = file.getName().substring(0, file.getName().lastIndexOf('.'));
         System.out.println("saveTargetFile called: " + filename);
@@ -255,8 +260,6 @@ public class ESBSrcTran {
         for (Object o : input_file_final) {
             ObservableList<String> od = (ObservableList) o;
             System.out.println("Inserting the Data");
-//            System.out.println("Final: " + od.toString().replaceAll("\\[", "").replaceAll("\\]", "").trim());?
-
             fileOutputStream.write(od.toString().replaceAll("\\[", "").replaceAll("\\]", "").trim().getBytes());
             fileOutputStream.write("\n".getBytes());
 
@@ -264,6 +267,18 @@ public class ESBSrcTran {
         fileOutputStream.close();
 
         System.out.println("File Closed after insertion");
+
+    }
+
+    public void saveFinalTargetFile(String trgfile) throws IOException {
+
+        File ip = new File(trgfile);
+        File op = new File(trgfile.substring(0, trgfile.lastIndexOf('.')) + "_final.csv");
+
+        Path original = FileSystems.getDefault().getPath(ip.getPath());
+        Path target = FileSystems.getDefault().getPath(op.getPath());
+
+        Files.copy(original, target, StandardCopyOption.REPLACE_EXISTING);
 
     }
 }

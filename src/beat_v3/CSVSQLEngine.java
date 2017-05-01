@@ -110,7 +110,7 @@ public class CSVSQLEngine {
 
         for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
             colname = rs.getMetaData().getColumnName(i);
-            System.out.println(rs.getMetaData().getColumnTypeName(i));
+            System.out.println(colname+"(Type) :"+rs.getMetaData().getColumnTypeName(i));
             collist.add(colname);
 
         }

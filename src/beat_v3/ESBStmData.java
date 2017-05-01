@@ -68,7 +68,7 @@ public class ESBStmData {
 
         for (int row = 19; row < xlSheet.getRows(); row++) {
             ESBStmBean bStmBean = new ESBStmBean();
-            bStmBean.sourceFieldName.setValue(xlSheet.getCell(0, row).getContents());
+            bStmBean.sourceFieldName.setValue(xlSheet.getCell(0, row).getContents().replaceAll("\\p{P}", ""));
             bStmBean.transRule.setValue(xlSheet.getCell(1, row).getContents());
             bStmBean.targetFieldName.setValue(xlSheet.getCell(2, row).getContents());
             bStmBean.dataProcesHint.setValue(xlSheet.getCell(3, row).getContents());

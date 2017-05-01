@@ -247,7 +247,7 @@
                                                 <Insets left="5.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <TextField fx:id="tfsrcconname" alignment="CENTER" HBox.hgrow="ALWAYS">
+                                          <TextField fx:id="tfsrcconname" promptText="Source Info" HBox.hgrow="ALWAYS">
                                              <HBox.margin>
                                                 <Insets left="10.0" right="10.0" />
                                              </HBox.margin>
@@ -265,7 +265,7 @@
                                     <HBox alignment="CENTER" maxHeight="50.0" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                        <children>
                                           <Label alignment="CENTER" contentDisplay="CENTER" text="Target" HBox.hgrow="ALWAYS" />
-                                          <TextField fx:id="tftrgconname" alignment="CENTER" HBox.hgrow="ALWAYS">
+                                          <TextField fx:id="tftrgconname" promptText="Target Info" HBox.hgrow="ALWAYS">
                                              <HBox.margin>
                                                 <Insets left="10.0" right="10.0" />
                                              </HBox.margin>
@@ -297,7 +297,7 @@
                                                    <children>
                                                       <TabPane fx:id="autosemifulltabpane" prefHeight="162.0" prefWidth="298.0" side="RIGHT" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <tabs>
-                                                            <Tab fx:id="fullautotab" style="-fx-background-color: #CD6155;" text="ESB">
+                                                            <Tab fx:id="esbautotab" style="-fx-background-color: #CD6155;" text="ESB">
                                                                <content>
                                                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                      <children>
@@ -349,6 +349,14 @@
                                                                                     <TableColumn fx:id="stm_src_tran_tbl_col" prefWidth="75.0" text="Source Transformation" />
                                                                                     <TableColumn fx:id="stm_trg_field_tbl_col" prefWidth="75.0" text="Target Field" />
                                                                                  </columns>
+                                                                                 <contextMenu>
+                                                                                    <ContextMenu fx:id="stmtblcontextmenu">
+                                                                                      <items>
+                                                                                        <MenuItem mnemonicParsing="false" text="Refresh" />
+                                                                                          <MenuItem fx:id="clrstmtblcontextmenuitem" mnemonicParsing="false" onAction="#stmTblClear" text="Clear" />
+                                                                                      </items>
+                                                                                    </ContextMenu>
+                                                                                 </contextMenu>
                                                                               </TableView>
                                                                            </children>
                                                                         </VBox>
@@ -367,17 +375,17 @@
                                                                <items>
                                                                   <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308">
                                                                      <children>
-                                                                        <Button fx:id="autoresultrunbt" mnemonicParsing="false" onAction="#autoResultRunButtonAction" text="RUN" HBox.hgrow="ALWAYS">
+                                                                        <Button fx:id="autoresultrunbt" disable="true" mnemonicParsing="false" onAction="#autoResultRunButtonAction" text="RUN" HBox.hgrow="ALWAYS">
                                                                            <HBox.margin>
                                                                               <Insets left="10.0" right="10.0" />
                                                                            </HBox.margin>
                                                                         </Button>
-                                                                        <Button mnemonicParsing="false" text="SAVE" HBox.hgrow="ALWAYS">
+                                                                        <Button disable="true" mnemonicParsing="false" text="SAVE" HBox.hgrow="ALWAYS">
                                                                            <HBox.margin>
                                                                               <Insets right="10.0" />
                                                                            </HBox.margin>
                                                                         </Button>
-                                                                        <Button mnemonicParsing="false" text="CLEAR" HBox.hgrow="ALWAYS">
+                                                                        <Button disable="true" mnemonicParsing="false" text="CLEAR" HBox.hgrow="ALWAYS">
                                                                            <HBox.margin>
                                                                               <Insets right="10.0" />
                                                                            </HBox.margin>
@@ -388,11 +396,11 @@
                                                             </ToolBar>
                                                             <TabPane fx:id="advanResultTabPane" prefHeight="200.0" prefWidth="200.0" side="RIGHT" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                                                               <tabs>
-                                                                <Tab fx:id="basicResultTab" style="-fx-background-color: #D4E6F1;" text="BASIC">
+                                                                  <Tab fx:id="basicResultTab1" style="-fx-background-color: #D4E6F1;" text="BASIC">
                                                                      <content>
-                                                                        <TabPane fx:id="tbpaneautoresult" prefHeight="200.0" prefWidth="200.0" rotateGraphic="true" tabClosingPolicy="UNAVAILABLE">
+                                                                        <TabPane fx:id="tbpaneautoresult1" prefHeight="200.0" prefWidth="200.0" rotateGraphic="true" tabClosingPolicy="UNAVAILABLE">
                                                                            <tabs>
-                                                                              <Tab fx:id="tabrslttotalcnt" text="Total Counts">
+                                                                              <Tab fx:id="tabrslttotalcnt1" text="Total Counts">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
@@ -401,70 +409,78 @@
                                                                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                                                                              </columnResizePolicy>
                                                                                           </TableView>
-                                                                                       </children></AnchorPane>
+                                                                                       </children>
+                                                                                    </AnchorPane>
                                                                                  </content>
                                                                               </Tab>
-                                                                              <Tab fx:id="tabrsltnullcol" text="Count of Nulls / Column">
+                                                                              <Tab fx:id="tabrsltnullcol1" text="Count of Nulls / Column">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
                                                                                           <TableView fx:id="totalCounts_null_tbl_view" prefHeight="84.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                                                       </children></AnchorPane>
+                                                                                       </children>
+                                                                                    </AnchorPane>
                                                                                  </content>
                                                                               </Tab>
-                                                                              <Tab fx:id="tabrsltnotnullcol" text="Count of Not Nulls / Column">
+                                                                              <Tab fx:id="tabrsltnotnullcol1" text="Count of Not Nulls / Column">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
                                                                                           <TableView fx:id="totalCountsnot_null_tbl_view" prefHeight="84.0" prefWidth="270.0" />
-                                                                                       </children></AnchorPane>
+                                                                                       </children>
+                                                                                    </AnchorPane>
                                                                                  </content>
                                                                               </Tab>
-                                                                              <Tab fx:id="tabrsltdupcol" text="Count of Duplicates / Column">
+                                                                              <Tab fx:id="tabrsltdupcol1" text="Count of Duplicates / Column">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
                                                                                           <TableView fx:id="countDupli_tbl_view" prefHeight="84.0" prefWidth="270.0" />
-                                                                                       </children></AnchorPane>
+                                                                                       </children>
+                                                                                    </AnchorPane>
                                                                                  </content>
                                                                               </Tab>
-                                                                              <Tab fx:id="tabrsltdstcol" text="Count of Distinct / Column">
+                                                                              <Tab fx:id="tabrsltdstcol1" text="Count of Distinct / Column">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
                                                                                           <TableView fx:id="countDistinct_tbl_view" prefHeight="84.0" prefWidth="270.0" />
-                                                                                       </children></AnchorPane>
+                                                                                       </children>
+                                                                                    </AnchorPane>
                                                                                  </content>
                                                                               </Tab>
-                                                                              <Tab fx:id="tabrsltsumcol" text="Count of Numerics / Column">
+                                                                              <Tab fx:id="tabrsltsumcol1" text="Count of Numerics / Column">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
                                                                                           <TableView fx:id="countNumerics_tbl_view" prefHeight="84.0" prefWidth="270.0" />
-                                                                                       </children></AnchorPane>
+                                                                                       </children>
+                                                                                    </AnchorPane>
                                                                                  </content>
                                                                               </Tab>
-                                                                              <Tab fx:id="tabrsltmaxcol" text="Max / Column">
+                                                                              <Tab fx:id="tabrsltmaxcol1" text="Max / Column">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
                                                                                           <TableView fx:id="max_tbl_view" prefHeight="84.0" prefWidth="270.0" />
-                                                                                       </children></AnchorPane>
+                                                                                       </children>
+                                                                                    </AnchorPane>
                                                                                  </content>
                                                                               </Tab>
-                                                                              <Tab fx:id="tabrsltmincol" text="Min / Column">
+                                                                              <Tab fx:id="tabrsltmincol1" text="Min / Column">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
                                                                                           <TableView fx:id="min_tbl_view" prefHeight="84.0" prefWidth="270.0" />
-                                                                                       </children></AnchorPane>
+                                                                                       </children>
+                                                                                    </AnchorPane>
                                                                                  </content>
                                                                               </Tab>
                                                                            </tabs>
                                                                         </TabPane>
                                                                      </content>
                                                                   </Tab>
-                                                                <Tab fx:id="advanResultTab" style="-fx-background-color: #85C1E9;" text="ADVANCED">
+                                                                  <Tab fx:id="advanResultTab" style="-fx-background-color: #85C1E9;" text="ADVANCED">
                                                                      <content>
                                                                         <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                                                                            <tabs>
@@ -475,7 +491,8 @@
                                                                                           <TableView fx:id="sourceData_tbl_view" prefHeight="84.0" prefWidth="270.0" />
                                                                                        </children>
                                                                                     </AnchorPane>
-                                                                                 </content></Tab>
+                                                                                 </content>
+                                                                              </Tab>
                                                                               <Tab text="Target Data">
                                                                                  <content>
                                                                                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
@@ -483,7 +500,8 @@
                                                                                           <TableView fx:id="targetData_tbl_view" prefHeight="84.0" prefWidth="270.0" />
                                                                                        </children>
                                                                                     </AnchorPane>
-                                                                                 </content></Tab>
+                                                                                 </content>
+                                                                              </Tab>
                                                                               <Tab text="Un Matched Data">
                                                                                  <content>
                                                                                     <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
@@ -495,7 +513,8 @@
                                                                                                       <TableView fx:id="unsourceData_tbl_view" prefHeight="84.0" prefWidth="270.0" />
                                                                                                    </children>
                                                                                                 </AnchorPane>
-                                                                                             </content></Tab>
+                                                                                             </content>
+                                                                                          </Tab>
                                                                                           <Tab text="Target">
                                                                                              <content>
                                                                                                 <AnchorPane prefHeight="200.0" prefWidth="200.0">
@@ -503,7 +522,8 @@
                                                                                                       <TableView fx:id="unMatchtargetData_tbl_view" prefHeight="84.0" prefWidth="270.0" />
                                                                                                    </children>
                                                                                                 </AnchorPane>
-                                                                                             </content></Tab>
+                                                                                             </content>
+                                                                                          </Tab>
                                                                                        </tabs>
                                                                                     </TabPane>
                                                                                  </content>

@@ -32,6 +32,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
@@ -104,7 +105,7 @@ public class MainStageController implements Initializable {
     @FXML
     private TextField tftrgconname;
     @FXML
-    private Tab tabmantesting, semiautotab, fullautotab;
+    private Tab tabmantesting, esbautotab;
     @FXML
     private Tab tabautotesting, advanceTestScenTab, advanResultTab, basicResultTab, basicTestScenTab;
     @FXML
@@ -129,6 +130,8 @@ public class MainStageController implements Initializable {
     private AnchorPane resultAnchorPane;
     @FXML
     private SplitPane workspaceSplitPane;
+    @FXML
+    private Button autoresultrunbt;
 
     /*Code Created By the Adithya 29-04-2017 */
  /*STM Table Data */
@@ -161,6 +164,8 @@ public class MainStageController implements Initializable {
     
     @FXML
     private TableColumn tabPane_tbl_columns;
+    
+    private CSVSQLEngine cssqleng;
 
     /*End of the Code by Adithya  */
     // @FXML
@@ -186,6 +191,10 @@ public class MainStageController implements Initializable {
     //file chooser
     final FileChooser fileChooser = new FileChooser();
     
+    //source & file files
+    private String srcfile;
+    private String trgfile;
+    
     @FXML
     private void dbAddButtonAction(ActionEvent event) {
         
@@ -208,6 +217,9 @@ public class MainStageController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        //initailizing csv sql engine
+        cssqleng = new CSVSQLEngine();
 
         //workspaceSplitPane.setDividerPositions(10);       
         //resultAnchorPane.setVisible(false);
@@ -863,7 +875,7 @@ public class MainStageController implements Initializable {
     }
     
     @FXML
-    public void autoResultRunButtonAction() {
+    public void autoResultRunButtonAction() throws Exception {
         
         List ll = getSelectedTestCases();
         System.out.println("Selected TestCases : " + ll);
@@ -871,16 +883,12 @@ public class MainStageController implements Initializable {
         List testplan = new ArrayList();
 
         //autosemifulltabpane.getSelectionModel().getSelectedItem()
-        if (semiautotab.isSelected()) {
+        if (esbautotab.isSelected()) {
             
             System.out.println("Selected semiautotab");
             generateTestplan(ll);
             
-        } else if (fullautotab.isSelected()) {
-            
-            System.out.println("Selected fullautotab");
-            
-        }
+        } 
         
     }
     
@@ -1007,18 +1015,27 @@ public class MainStageController implements Initializable {
         
     }
     
-    private void generateTestplan(List ll) {
-
-        //total_cnts, null_cnts, not_null_cnts, dup_cnts, dst_cnts, sum_num_cols, max_cols, min_cols
-        ObservableList src_table = srcsemikeycoltbl.getItems();
-        ObservableList trg_table = trgsemikeycoltbl.getItems();
+    private void generateTestplan(List ll) throws Exception {
         
-        if (src_table.size() == 0 || trg_table.size() == 0) {
+            progstatus_label.setText("Applying Source Transformations on Input File");
+            progressLoadingImage();
+
+            //applying Transformation and to the source file
+            ESBSrcTran bSrcTran = new ESBSrcTran(stmData);
+            bSrcTran.applySRCTran(srcfile);
+
+            //saving to tmp files
+            bSrcTran.saveFinalSourceFile(srcfile);
+            bSrcTran.saveFinalTargetFile(trgfile);
             
-            new AlertUI("[ERROR] Missing Source / Target");
+            tfsrcconname.setText(tfsrcconname.getText().replace(".csv", "_final.csv"));
+            tftrgconname.setText(tftrgconname.getText().replace(".txt", "_final.csv"));
             
-        } else {
+            progstatus_label.setText("Applying Source Transformations on Input File Completed");
+            progressCompletedImage();
             
+
+       
             progstatus_label.setText("Generating Test Plan...");
             progressLoadingImage();
             
@@ -1033,65 +1050,59 @@ public class MainStageController implements Initializable {
             max_col_testplan = new HashMap<String, String>();
             min_col_testplan = new HashMap<String, String>();
             
-            for (Object item : ll) {
-                
-                if (item.toString().equals("total_cnts")) {
-                    
-                    if (this.getSourceType().equalsIgnoreCase("ff")) {
-                        total_cnt_testplan.put("Total_Cnt_Src_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src")).replace(".", ""));
-                    } else {
-                        total_cnt_testplan.put("Total_Cnt_Src_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src")));
-                    }
-                    
-                    if (this.getTargetType().equalsIgnoreCase("ff")) {
-                        total_cnt_testplan.put("Total_Cnt_Trg_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg")).replace(".", ""));
-                    } else {
-                        total_cnt_testplan.put("Total_Cnt_Trg_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg")));
-                    }
-                    
-                    System.out.println("Count Test Plan :" + total_cnt_testplan);
+            
+        //System.out.println(this.getConnNameFromUI("src"));
+        // System.out.println(this.getConnNameFromUI("trg"));
+        //get column names
+        List src_table = cssqleng.getFFColumns(this.getConnNameFromUI("src"), "select * from " + this.getTableNameFromUI("src"));
+        List trg_table = cssqleng.getFFColumns(this.getConnNameFromUI("trg"), "select * from " + this.getTableNameFromUI("trg"));
 
-                    //imp for html table rendering
-                    //cnt_result_webview.getEngine().load("file:///C:/Users/Ravindra/Desktop/sample.html");
+        //System.out.println(src_table);
+        //System.out.println(trg_table);
+            
+        for (Object item : ll) {
+
+            if (item.toString().equals("total_cnts")) {
+
+                if (this.getSourceType().equalsIgnoreCase("ff")) {
+                    total_cnt_testplan.put("Total_Cnt_Src_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src")).replace(".", ""));
+                } else {
+                    total_cnt_testplan.put("Total_Cnt_Src_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src")));
                 }
-                
-                if (item.toString().equals("null_cnts")) {
 
-                    //ObservableList src_table = srcsemikeycoltbl.getItems();
-                    //ObservableList trg_table = trgsemikeycoltbl.getItems();
-                    List testcase = new ArrayList();
+                if (this.getTargetType().equalsIgnoreCase("ff")) {
+                    total_cnt_testplan.put("Total_Cnt_Trg_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg")).replace(".", ""));
+                } else {
+                    total_cnt_testplan.put("Total_Cnt_Trg_Testcase", qgen.getTotalCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg")));
+                }
+
+                System.out.println("Count Test Plan :" + total_cnt_testplan);
+
+            }
+
+            if (item.toString().equals("null_cnts")) {
+
+                //src and trg
+                for (int i = 0; i < src_table.size(); i++) {
+
+                    String row = src_table.get(i).toString();
+                    null_cnt_testplan.put("Null_Cnt_Src_Testcase_" + i, qgen.getNullCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), row, this.getSourceType()));
+                    row = trg_table.get(i).toString();
+                    null_cnt_testplan.put("Null_Cnt_Trg_Testcase_" + i, qgen.getNullCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"), row, this.getTargetType()));
+                }
+                System.out.println("Null Count Test Plan :" + null_cnt_testplan);
+            }
+
+            if (item.toString().equals("not_null_cnts")) {
 
                     //src and trg
                     for (int i = 0; i < src_table.size(); i++) {
                         
-                        String[] row = src_table.get(i).toString().replace("[", "").replace("]", "").split(",");
-                        
-                        null_cnt_testplan.put("Null_Cnt_Src_Testcase_" + i, qgen.getNullCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), row, this.getSourceType()));
-                        
-                        row = trg_table.get(i).toString().replace("[", "").replace("]", "").split(",");
-                        
-                        null_cnt_testplan.put("Null_Cnt_Trg_Testcase_" + i, qgen.getNullCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"), row, this.getTargetType()));
-                        
-                    }
-                    
-                    System.out.println("Null Count Test Plan :" + null_cnt_testplan);
-                    
-                }
-                
-                if (item.toString().equals("not_null_cnts")) {
-
-                    //ObservableList src_table = srcsemikeycoltbl.getItems();
-                    //ObservableList trg_table = trgsemikeycoltbl.getItems();
-                    List testcase = new ArrayList();
-
-                    //src and trg
-                    for (int i = 0; i < src_table.size(); i++) {
-                        
-                        String[] row = src_table.get(i).toString().replace("[", "").replace("]", "").split(",");
+                        String row = src_table.get(i).toString();
                         
                         notnull_cnt_testplan.put("NotNull_Cnt_Src_Testcase_" + i, qgen.getNotNullCntQueries(this.getDBNameFromUI("src"), this.getTableNameFromUI("src"), row, this.getSourceType()));
                         
-                        row = trg_table.get(i).toString().replace("[", "").replace("]", "").split(",");
+                        row = trg_table.get(i).toString();
                         
                         notnull_cnt_testplan.put("NotNull_Cnt_Trg_Testcase_" + i, qgen.getNotNullCntQueries(this.getDBNameFromUI("trg"), this.getTableNameFromUI("trg"), row, this.getTargetType()));
                         
@@ -1100,7 +1111,7 @@ public class MainStageController implements Initializable {
                     System.out.println("Not Null Count Test Plan :" + notnull_cnt_testplan);
                     
                 }
-                
+                /*
                 if (item.toString().equals("dst_cnts")) {
 
                     //ObservableList src_table = srcsemikeycoltbl.getItems();
@@ -1224,14 +1235,13 @@ public class MainStageController implements Initializable {
                     
                     System.out.println("Sum of Col Test Plan :" + sum_num_testplan);
                     
-                }
+                }*/
                 
             }
             
             progstatus_label.setText("Test Plan Generated");
             progressCompletedImage();
-            
-        }
+
     }
     
     public void progressCompletedImage() {
@@ -1274,8 +1284,8 @@ public class MainStageController implements Initializable {
 
                 //STM VALIDATOR OBJECT
                 ESBSTMValidator estmvalid = new ESBSTMValidator();
-                String srcfile = stmConData.get("Source File Location").toString() + "\\" + stmConData.get("*Source DB/File Name").trim();
-                String trgfile = stmConData.get("Target File Location").toString() + "\\" + stmConData.get("*Target DB/File Name").trim();
+                this.srcfile = stmConData.get("Source File Location").toString() + "\\" + stmConData.get("*Source DB/File Name").trim();
+                this.trgfile = stmConData.get("Target File Location").toString() + "\\" + stmConData.get("*Target DB/File Name").trim();
                 
                 if (estmvalid.checkSrcTrgFiles(srcfile, trgfile)) {
                     tfsrcconname.setText("FlatFile::" + stmConData.get("*Source Host Name").toString() + "::" + srcfile);
@@ -1284,12 +1294,8 @@ public class MainStageController implements Initializable {
                     stm_conAut_txt_field.setText(stmConData.get("*Author").toString());
                     stm_conVer_txt_field.setText(stmConData.get("Version & History").toString());
                     esb_stm_tableview.setItems(stmData);
-
-                    //applying Transformation and to the source file
-                    ESBSrcTran bSrcTran = new ESBSrcTran(stmData);
-                    bSrcTran.applySRCTran(srcfile);
-//                    bSrcTran.printFinalData();// Data Check
-                    bSrcTran.saveTargetFile(srcfile);
+                    
+                    autoresultrunbt.setDisable(false);
                     
                 } else {
                     new ExceptionUI(new Exception("[Error] Source or Target File not found! Please check"));
@@ -1299,6 +1305,8 @@ public class MainStageController implements Initializable {
         }
         
     }
+    
+    //
 
     /*Method to set Columns Dynamically to the Multiple Table View --Adithya 30-04-2017*/
     public void setColumnsTableView(TableView tableView, ObservableList<String> tableColumns) {
@@ -1312,6 +1320,22 @@ public class MainStageController implements Initializable {
         } else {
             System.out.println("(Error) No Columns Data found");
         }
+    }
+    
+    //table clear function
+    @FXML
+    public void stmTblClear(){
+        
+        esb_stm_tableview.getItems().clear();
+        tfsrcconname.setText("");
+        tftrgconname.setText("");
+        stm_conTitle_txt_field.setText("");
+        stm_conAut_txt_field.setText("");
+        stm_conVer_txt_field.setText("");
+        
+        autoresultrunbt.setDisable(true);
+        
+        
     }
     
 }

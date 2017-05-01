@@ -23,31 +23,31 @@ public class QueryGenerator {
     
     
         
-    public String getNullCntQueries(String schema, String tblname, String[] data,String type) {
+    public String getNullCntQueries(String schema, String tblname, String data,String type) {
 
         String qry;
  
         if(type.equalsIgnoreCase("db"))
         {
-            qry = "select count(1) as "+ data[1].trim() +" from " + schema + "." + tblname + " where " +data[2].trim() + " is null" ;
+            qry = "select count(1) as "+ data.trim() +" from " + schema + "." + tblname + " where " +data.trim() + " is null";
         }
         else
         {
-            qry = "select count(1) as "+ data[1].trim() +" from " + tblname + " where lower("+data[2].trim()+") = 'null'";
+            qry = "select count(1) as "+ data.trim() +" from " + tblname + " where lower("+data.trim()+") = 'null' or lower("+data.trim()+") = ''";
         }
         
         return qry;
 
     }
     
-    public String getNotNullCntQueries(String schema, String tblname, String[] data, String type) {
+    public String getNotNullCntQueries(String schema, String tblname, String data, String type) {
 
         String qry;
 
         if (type.equalsIgnoreCase("db")) {
-            qry = "select count(1) as " + data[1].trim() + " from " + schema + "." + tblname + " where " + data[2].trim()+ " is  not null";
+            qry = "select count(1) as " + data.trim() + " from " + schema + "." + tblname + " where " + data.trim()+ " is  not null";
         } else {
-            qry = "select count(1) as " + data[1].trim() + " from " + tblname + " where lower(" + data[2].trim()+ ") != 'null'";
+            qry = "select count(1) as " + data.trim() + " from " + tblname + " where lower(" + data.trim()+ ") != 'null' or lower("+data.trim()+") != ''";
         }
 
         return qry;
