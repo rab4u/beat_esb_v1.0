@@ -1284,11 +1284,12 @@ public class MainStageController implements Initializable {
                     stm_conAut_txt_field.setText(stmConData.get("*Author").toString());
                     stm_conVer_txt_field.setText(stmConData.get("Version & History").toString());
                     esb_stm_tableview.setItems(stmData);
-                    
+
                     //applying Transformation and to the source file
                     ESBSrcTran bSrcTran = new ESBSrcTran(stmData);
                     bSrcTran.applySRCTran(srcfile);
-                    
+                    bSrcTran.chechFinal();
+
                 } else {
                     new ExceptionUI(new Exception("[Error] Source or Target File not found! Please check"));
                 }
