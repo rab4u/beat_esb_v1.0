@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package beat_v3;
 
 import java.io.BufferedReader;
@@ -138,7 +134,7 @@ public class MainStageController implements Initializable {
     private Button autoresultrunbt;
 
     /*Code Created By the Adithya 29-04-2017 */
- /*STM Table Data */
+    /*STM Table Data */
     @FXML
     private TextField stm_conTitle_txt_field, stm_conAut_txt_field, stm_conVer_txt_field;
 
@@ -217,9 +213,6 @@ public class MainStageController implements Initializable {
     private CSVSQLEngine cssqleng;
 
     /*End of the Code by Adithya  */
-    // @FXML
-    // private WebView cnt_result_webview;
-    //Variables
     private LoadConnectionsTreeView lctv;
     private LoadFlatFilesTreeView lfftv;
     private TreeItem<String> connections, databases, tables;
@@ -745,14 +738,12 @@ public class MainStageController implements Initializable {
 
         System.out.println("Clicked - DB Add Trg Button");
 
-        //trgsemikeycoltbl.getItems().clear();
         String tablename = nodeselect.getValue();
         String dbname = nodeselect.getParent().getParent().getValue();
         String connname = nodeselect.getParent().getParent().getParent().getParent().getValue();
 
         tftrgconname.setText(connname + "::" + dbname + "::" + tablename);
 
-        //dbLoadColumnNamesUI(connname, dbname, tablename, combotrgcolnames,"trg");
     }
 
     @FXML
@@ -781,40 +772,7 @@ public class MainStageController implements Initializable {
 
         getSetFileName(filename, filetype, tfsrcconname);
 
-        // srcsemikeycoltbl.getItems().clear();
-        /*
-         try {
-           
-         String filename = nodeselect1.getValue();
-         String filetype = nodeselect1.getParent().getValue();
-
-         getSetFileName(filename, filetype, tfsrcconname);
-         CSVSQLEngine cse = new CSVSQLEngine();
-         String ffdetails = tfsrcconname.getText().split("::")[2];
-         String qry = "Select * from " + filename.split("\\.")[0];
-
-         List colslist = cse.getFFColumns(ffdetails, qry);
-         srccoltypes = new ArrayList();
-            
-         for(Object item:colslist){
-                   
-         System.out.println("COl NAME: "+item);
-         srccoltypes.add(cse.getFFColumnType(ffdetails, item.toString(),filename.split("\\.")[0],false));
-         }
-          
-            
-         colslist.add(0, "ALL");
-         colslist.add(1,"-----------------");
-         combosrccolnames.getItems().clear();
-         combosrccolnames.getItems().addAll(colslist);
-
-         } catch (Exception ex) {
-         Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
-         new ExceptionUI(ex);
-            
-         }
-         */
-    }
+     }
 
     @FXML
     private void ffaddTrgButtonAction(ActionEvent event) {
@@ -824,36 +782,6 @@ public class MainStageController implements Initializable {
         String filetype = nodeselect1.getParent().getValue();
 
         getSetFileName(filename, filetype, tftrgconname);
-
-        //trgsemikeycoltbl.getItems().clear();
-        /*
-         try {
-
-         String filename = nodeselect1.getValue();
-         String filetype = nodeselect1.getParent().getValue();
-
-         getSetFileName(filename, filetype, tftrgconname);
-
-         CSVSQLEngine cse = new CSVSQLEngine();
-         String ffdetails = tftrgconname.getText().split("::")[2];
-         String qry = "Select * from " + filename.split("\\.")[0];
-
-         List colslist = cse.getFFColumns(ffdetails, qry);
-         trgcoltypes = new ArrayList();
-         for (Object item : colslist) {
-         trgcoltypes.add(cse.getFFColumnType(ffdetails, item.toString(), filename.split("\\.")[0],false));
-         }
-            
-         colslist.add(0, "ALL");
-         colslist.add(1,"-----------------");
-         combotrgcolnames.getItems().clear();
-         combotrgcolnames.getItems().addAll(colslist);
-
-         } catch (Exception ex) {
-         Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
-         new ExceptionUI(ex);
-         }
-         */
     }
 
     @FXML
@@ -1038,9 +966,7 @@ public class MainStageController implements Initializable {
 
         //autosemifulltabpane.getSelectionModel().getSelectedItem()
         if (esbautotab.isSelected()) {
-
-            System.out.println("Selected semiautotab");
-            generateTestplan(ll);
+                    generateTestplan(ll);
 
         }
 
@@ -1437,6 +1363,8 @@ public class MainStageController implements Initializable {
 
                 progstatus_label.setText("Test Plan Generated");
                 progressCompletedImage();
+                processTestPlan(ll);
+                
             }
         });
 
@@ -1571,6 +1499,8 @@ public class MainStageController implements Initializable {
         try {
             ObservableList srcResult = csvengine.getFFTableData(srcfile, srcQuery);
             ObservableList trgResult = csvengine.getFFTableData(trgfile, trgQuery);
+           
+            
             if (item.equals("total_cnts")) {
 
                 System.out.println("SRC Count: " + srcResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", ""));
@@ -1586,7 +1516,7 @@ public class MainStageController implements Initializable {
                 }
 
                 System.out.println("List: " + total_cnt_testplan_data.toString());
-                tableView.setItems(total_cnt_testplan_data);
+                
 
             } else if (item.equals("cmpl_data")) {
 
@@ -1622,27 +1552,69 @@ public class MainStageController implements Initializable {
     }
 
     //Methods to call the executeTestPlan method to fetch the Data --Adithya
-    public void getTestPlanData(List checkOptionData) {
+    public void processTestPlan(List checkOptionData) {
         System.out.println("getTestPlanData called");
+        
+        
         for (Object item : checkOptionData) {
+            
             System.out.println("Calling Check Option " + item.toString());
-            if (item.toString().equals("total_cnts")) {
 
-//Calling the Plan Execution
-//                execueteTestPlan(totalCounts_tbl_view, total_cnt_testplan_data, item.toString(), total_cnt_testplan.get("Total_Cnt_Src_Testcase").toString(), total_cnt_testplan.get("Total_Cnt_Trg_Testcase").toString(), src_table, trg_table);
-                System.out.println("Count Test Plan :" + total_cnt_testplan);
+            if (item.toString().equals("total_cnts")) {
+                //Calling the Plan Execution
+
+                Task task = new Task<Void>() {
+                    @Override
+                    public Void call() {
+
+                        //non ui code
+                        execueteTestPlan(totalCounts_tbl_view, total_cnt_testplan_data, item.toString(), total_cnt_testplan.get("Total_Cnt_Src_Testcase").toString(), total_cnt_testplan.get("Total_Cnt_Trg_Testcase").toString(), src_table, trg_table);
+                        Platform.runLater(new Runnable() {
+                            public void run() {
+                                //ui code
+                                totalCounts_tbl_view.setItems(total_cnt_testplan_data);
+                            }
+                        });
+                        return null;
+                    }
+                };
+
+                Thread t = new Thread(task);
+                t.setDaemon(true);
+                t.start();
+
 
             }
 
             if (item.toString().equals("null_cnts")) {
 
                 System.out.println("Null Count Test Plan :" + null_cnt_testplan);
-                for (int j = 0; j < null_cnt_testplan.size() / 2; j++) {
-                    System.out.println("SRC Test : " + null_cnt_testplan.get("Null_Cnt_Src_Testcase_" + j));
-//Calling the Plan Execution
-                    execueteTestPlan(totalCounts_null_tbl_view, null_cnt_testplan_data, item.toString(), null_cnt_testplan.get("Null_Cnt_Src_Testcase_" + j), null_cnt_testplan.get("Null_Cnt_Trg_Testcase_" + j), src_table, trg_table);
+                Task task = new Task<Void>() {
+                    @Override
+                    public Void call() {
+                        //non ui code
 
-                }
+                        for (int j = 0; j < null_cnt_testplan.size() / 2; j++) {
+                            System.out.println("SRC Test : " + null_cnt_testplan.get("Null_Cnt_Src_Testcase_" + j));
+                            //Calling the Plan Execution
+                            execueteTestPlan(totalCounts_null_tbl_view, null_cnt_testplan_data, item.toString(), null_cnt_testplan.get("Null_Cnt_Src_Testcase_" + j), null_cnt_testplan.get("Null_Cnt_Trg_Testcase_" + j), src_table, trg_table);
+
+                        }
+
+                        Platform.runLater(new Runnable() {
+                            public void run() {
+                                //ui code
+                                totalCounts_null_tbl_view.setItems(null_cnt_testplan_data);
+                            }
+                        });
+                        return null;
+                    }
+                };
+
+                Thread t = new Thread(task);
+                t.setDaemon(true);
+                t.start();
+                        
             }
 
             if (item.toString().equals("not_null_cnts")) {
@@ -1650,7 +1622,7 @@ public class MainStageController implements Initializable {
                 System.out.println("Not Null Count Test Plan :" + notnull_cnt_testplan);
 
                 for (int j = 0; j < notnull_cnt_testplan.size() / 2; j++) {
-//Calling the Plan Execution
+                    //Calling the Plan Execution
                     execueteTestPlan(totalCountsnot_null_tbl_view, notnull_cnt_testplan_data, item.toString(), notnull_cnt_testplan.get("NotNull_Cnt_Src_Testcase_" + j), notnull_cnt_testplan.get("NotNull_Cnt_Trg_Testcase_" + j), src_table, trg_table);
 
                 }
@@ -1682,7 +1654,7 @@ public class MainStageController implements Initializable {
                 System.out.println("Max of Col Test Plan :" + max_col_testplan);
 
                 for (int j = 0; j < max_col_testplan.size() / 2; j++) {
-//Calling the Plan Execution
+                    //Calling the Plan Execution
                     execueteTestPlan(max_tbl_view, max_col_testplan_data, item.toString(), max_col_testplan.get("Max_Col_Src_Testcase_" + j), max_col_testplan.get("Max_Col_Trg_Testcase_" + j), src_table, trg_table);
 
                 }
@@ -1692,7 +1664,7 @@ public class MainStageController implements Initializable {
 
                 System.out.println("Min of Col Test Plan :" + min_col_testplan);
                 for (int j = 0; j < min_col_testplan.size() / 2; j++) {
-//Calling the Plan Execution
+                    //Calling the Plan Execution
                     execueteTestPlan(min_tbl_view, min_col_testplan_data, item.toString(), min_col_testplan.get("Min_Col_Src_Testcase_" + j), min_col_testplan.get("Min_Col_Trg_Testcase_" + j), src_table, trg_table);
 
                 }
@@ -1711,7 +1683,7 @@ public class MainStageController implements Initializable {
             if (item.toString().equals("cmpl_data")) {
 
                 System.out.println("Complete Data :" + cmpl_data_tesplan);
-                //Calling the Plan Execution
+                //Calling the Plan Execution - sourceData_tbl_view not useful and need to pass a param
                 execueteTestPlan(sourceData_tbl_view, stmData, item.toString(), cmpl_data_tesplan.get("Compl_Data_Src_Testcase"), cmpl_data_tesplan.get("Compl_Data_Trg_Testcase"), src_table, trg_table);
 
             }
