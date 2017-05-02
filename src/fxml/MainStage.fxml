@@ -396,7 +396,7 @@
                                                             </ToolBar>
                                                             <TabPane fx:id="advanResultTabPane" prefHeight="200.0" prefWidth="200.0" side="RIGHT" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                                                               <tabs>
-                                                                  <Tab fx:id="basicResultTab1" style="-fx-background-color: #D4E6F1;" text="BASIC">
+                                                                  <Tab fx:id="basicResultTab" style="-fx-background-color: #D4E6F1;" text="BASIC">
                                                                      <content>
                                                                         <TabPane fx:id="tbpaneautoresult1" prefHeight="200.0" prefWidth="200.0" rotateGraphic="true" tabClosingPolicy="UNAVAILABLE">
                                                                            <tabs>

@@ -265,6 +265,10 @@ public class MainStageController implements Initializable {
     private ObservableList srcCmplResult;
     private ObservableList trgCmplResult;
 
+    //Total Count Variable
+    private String srcCnt;
+    private String trgCnt;
+
     @FXML
     private void dbAddButtonAction(ActionEvent event) {
 
@@ -1509,12 +1513,16 @@ public class MainStageController implements Initializable {
 
             if (item.equals("total_cnts")) {
 
-                System.out.println("SRC Count: " + srcResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", ""));
-                System.out.println("trg Count: " + trgResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                srcCnt = srcResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", "");
+                trgCnt = trgResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", "");
+
+                System.out.println("SRC Count: " + srcCnt);
+                System.out.println("trg Count: " + trgCnt);
+
                 if (bean == null) {
                     bean = new TotalCountBean();
-                    bean.srcCnt.setValue(srcResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", ""));
-                    bean.trgCnt.setValue(trgResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                    bean.srcCnt.setValue(srcCnt);
+                    bean.trgCnt.setValue(trgCnt);
 
                     bean.totCnt.setValue(bean.getSrcCnt().equals(bean.getTrgCnt()));
                     total_cnt_testplan_data.add(bean);
@@ -1529,12 +1537,27 @@ public class MainStageController implements Initializable {
                 srcCmplResult = srcResult;
                 trgCmplResult = trgResult;
 
-            } else {
+            } else if (item.equals("dup_cnts")) {
 
                 System.out.println("MinMAx Count: " + srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
                 System.out.println("MinMax Count: " + trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
                 CountsMaxMinBean countsMaxMinBean = new CountsMaxMinBean();
-                System.out.println("Source Col: " + srcQuery.split(" ")[3] + " : " + srcQuery.split(" ")[3]);
+//                System.out.println("Source Col: " + srcQuery.split(" ")[3] + " : " + srcQuery.split(" ")[3]);
+                countsMaxMinBean.srcCol.setValue(srcQuery.split(" ")[3]);
+
+                countsMaxMinBean.srcColCount.setValue(Integer.toString(Integer.parseInt(trgCnt) - Integer.parseInt(srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""))));
+
+                countsMaxMinBean.trgCol.setValue(trgQuery.split(" ")[3]);
+                countsMaxMinBean.trgColCount.setValue(Integer.toString(Integer.parseInt(trgCnt) - Integer.parseInt(trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""))));
+                countsMaxMinBean.result.setValue(countsMaxMinBean.getSrcColCount().equals(countsMaxMinBean.getTrgColCount()));
+
+                dataStore.add(countsMaxMinBean);
+
+                System.out.println(dataStore.get(0));
+
+            } else {
+                CountsMaxMinBean countsMaxMinBean = new CountsMaxMinBean();
+//                System.out.println("Source Col: " + srcQuery.split(" ")[3] + " : " + srcQuery.split(" ")[3]);
                 countsMaxMinBean.srcCol.setValue(srcQuery.split(" ")[3]);
                 countsMaxMinBean.srcColCount.setValue(srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
                 countsMaxMinBean.trgCol.setValue(trgQuery.split(" ")[3]);
@@ -1598,26 +1621,21 @@ public class MainStageController implements Initializable {
                             System.out.println("SRC Test : " + null_cnt_testplan.get("Null_Cnt_Src_Testcase_" + j));
                             //Calling the Plan Execution
                             execueteTestPlan(null_cnt_testplan_data, item.toString(), null_cnt_testplan.get("Null_Cnt_Src_Testcase_" + j), null_cnt_testplan.get("Null_Cnt_Trg_Testcase_" + j), src_table, trg_table);
-                            
+
                         }
-                        
-                        
 
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
-                                                               
+
                                 BasicTestResulTableRowHighlighter(totalCounts_null_tbl_view);
                                 totalCounts_null_tbl_view.setItems(null_cnt_testplan_data);
-                                   
-                                
+
                             }
                         });
                         return null;
                     }
                 };
-                
-                
 
                 Thread t = new Thread(task);
                 t.setDaemon(true);
@@ -1832,7 +1850,7 @@ public class MainStageController implements Initializable {
         }
 
     }
-    
+
     public void CountTableRowHighlighter() {
         totalCounts_tbl_view.setRowFactory(row -> new TableRow<TotalCountBean>() {
             @Override
@@ -1849,45 +1867,37 @@ public class MainStageController implements Initializable {
                         //setStyle("-fx-background-color: #ff9999");
                         setStyle("-fx-background-color: #ff9999");
 
-                    }    
+                    }
 
                 }
             }
         });
 
     }
-    
+
     public void BasicTestResulTableRowHighlighter(TableView tblview) {
         tblview.setRowFactory(row -> new TableRow<CountsMaxMinBean>() {
             @Override
             public void updateItem(CountsMaxMinBean item, boolean empty) {
                 super.updateItem(item, empty);
 
-               
-                
                 if (item == null || empty) {
                     setStyle("");
                 } else {
-                    System.out.println("CHecking :"+item.result.getValue());
+                    System.out.println("CHecking :" + item.result.getValue());
                     //Now 'item' has all the info of the Person in this row
                     if (!item.result.getValue()) {
                         //We apply now the changes in all the cells of the row
                         //setStyle("-fx-background-color: #ff9999");
                         setStyle("-fx-background-color: #ff9999");
 
-                    }
-                    else
-                    {
-                         setStyle("");
+                    } else {
+                        setStyle("");
                     }
                 }
             }
         });
 
     }
-    
-    
-    
-    
 
 }
