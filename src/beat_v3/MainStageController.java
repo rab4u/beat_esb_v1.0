@@ -41,6 +41,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
@@ -1516,7 +1517,6 @@ public class MainStageController implements Initializable {
                     bean.trgCnt.setValue(trgResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", ""));
 
                     bean.totCnt.setValue(bean.getSrcCnt().equals(bean.getTrgCnt()));
-
                     total_cnt_testplan_data.add(bean);
                 }
 
@@ -1573,6 +1573,7 @@ public class MainStageController implements Initializable {
                             public void run() {
                                 //ui code
                                 totalCounts_tbl_view.setItems(total_cnt_testplan_data);
+                                CountTableRowHighlighter();
                             }
                         });
                         return null;
@@ -1604,6 +1605,7 @@ public class MainStageController implements Initializable {
                             public void run() {
                                 //ui code
                                 totalCounts_null_tbl_view.setItems(null_cnt_testplan_data);
+                                BasicTestResulTableRowHighlighter(totalCounts_null_tbl_view);
                             }
                         });
                         return null;
@@ -1817,5 +1819,55 @@ public class MainStageController implements Initializable {
         }
 
     }
+    
+    public void CountTableRowHighlighter() {
+        totalCounts_tbl_view.setRowFactory(row -> new TableRow<TotalCountBean>() {
+            @Override
+            public void updateItem(TotalCountBean item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+
+                    setStyle("");
+                } else {
+                    //Now 'item' has all the info of the Person in this row
+                    if (!item.totCnt.getValue()) {
+                        //We apply now the changes in all the cells of the row
+                        //setStyle("-fx-background-color: #ff9999");
+                        setStyle("-fx-background-color: #ff9999");
+
+                    }    
+
+                }
+            }
+        });
+
+    }
+    
+    public void BasicTestResulTableRowHighlighter(TableView tblview) {
+        tblview.setRowFactory(row -> new TableRow<CountsMaxMinBean>() {
+            @Override
+            public void updateItem(CountsMaxMinBean item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setStyle("");
+                } else {
+                    //Now 'item' has all the info of the Person in this row
+                    if (!item.result.getValue()) {
+                        //We apply now the changes in all the cells of the row
+                        //setStyle("-fx-background-color: #ff9999");
+                        setStyle("-fx-background-color: #ff9999");
+
+                    }                 
+                }
+            }
+        });
+
+    }
+    
+    
+    
+    
 
 }
