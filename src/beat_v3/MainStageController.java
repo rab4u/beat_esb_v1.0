@@ -1598,19 +1598,26 @@ public class MainStageController implements Initializable {
                             System.out.println("SRC Test : " + null_cnt_testplan.get("Null_Cnt_Src_Testcase_" + j));
                             //Calling the Plan Execution
                             execueteTestPlan(null_cnt_testplan_data, item.toString(), null_cnt_testplan.get("Null_Cnt_Src_Testcase_" + j), null_cnt_testplan.get("Null_Cnt_Trg_Testcase_" + j), src_table, trg_table);
-
+                            
                         }
+                        
+                        
 
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
-                                totalCounts_null_tbl_view.setItems(null_cnt_testplan_data);
+                                                               
                                 BasicTestResulTableRowHighlighter(totalCounts_null_tbl_view);
+                                totalCounts_null_tbl_view.setItems(null_cnt_testplan_data);
+                                   
+                                
                             }
                         });
                         return null;
                     }
                 };
+                
+                
 
                 Thread t = new Thread(task);
                 t.setDaemon(true);
@@ -1850,16 +1857,23 @@ public class MainStageController implements Initializable {
             public void updateItem(CountsMaxMinBean item, boolean empty) {
                 super.updateItem(item, empty);
 
+               
+                
                 if (item == null || empty) {
                     setStyle("");
                 } else {
+                    System.out.println("CHecking :"+item.result.getValue());
                     //Now 'item' has all the info of the Person in this row
                     if (!item.result.getValue()) {
                         //We apply now the changes in all the cells of the row
                         //setStyle("-fx-background-color: #ff9999");
                         setStyle("-fx-background-color: #ff9999");
 
-                    }                 
+                    }
+                    else
+                    {
+                         setStyle("");
+                    }
                 }
             }
         });
