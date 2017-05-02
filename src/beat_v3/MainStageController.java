@@ -1640,6 +1640,7 @@ public class MainStageController implements Initializable {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
+                                BasicTestResulTableRowHighlighter(totalCountsnot_null_tbl_view);
                                 totalCountsnot_null_tbl_view.setItems(notnull_cnt_testplan_data);
                             }
                         });
@@ -1668,6 +1669,7 @@ public class MainStageController implements Initializable {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
+                                BasicTestResulTableRowHighlighter(countDistinct_tbl_view);
                                 countDistinct_tbl_view.setItems(dst_cnt_testplan_data);
                             }
                         });
@@ -1697,6 +1699,7 @@ public class MainStageController implements Initializable {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
+                                BasicTestResulTableRowHighlighter(countDupli_tbl_view);
                                 countDupli_tbl_view.setItems(dup_cnt_testplan_data);
                             }
                         });
@@ -1726,6 +1729,7 @@ public class MainStageController implements Initializable {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
+                                BasicTestResulTableRowHighlighter(max_tbl_view);
                                 max_tbl_view.setItems(max_col_testplan_data);
                             }
                         });
@@ -1754,6 +1758,7 @@ public class MainStageController implements Initializable {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
+                                BasicTestResulTableRowHighlighter(min_tbl_view);
                                 min_tbl_view.setItems(min_col_testplan_data);
                             }
                         });
@@ -1781,6 +1786,7 @@ public class MainStageController implements Initializable {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
+                                BasicTestResulTableRowHighlighter(countNumerics_tbl_view);
                                 countNumerics_tbl_view.setItems(sum_num_testplan_data);
                             }
                         });
