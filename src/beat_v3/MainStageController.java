@@ -55,6 +55,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import jxl.read.biff.BiffException;
+import org.apache.commons.collections4.CollectionUtils;
 
 /**
  *
@@ -196,6 +197,9 @@ public class MainStageController implements Initializable {
             cnt_min_trg_col_tbl_col,
             cnt_min_trg_col_count_tbl_col,
             cnt_min_result_count_tbl_col;
+
+    @FXML
+    private Label dataValid_status_lbl;
 
     @FXML
     private TableColumn tabPane_tbl_columns;
@@ -1368,6 +1372,8 @@ public class MainStageController implements Initializable {
                 progstatus_label.setText("Test Plan Generated");
                 progressCompletedImage();
                 processTestPlan(ll);
+                progstatus_label.setText("Execution Completed");
+                progressCompletedImage();
 
             }
         });
@@ -1387,13 +1393,6 @@ public class MainStageController implements Initializable {
     public void progressLoadingImage() {
 
         proggif_image.setImage(new Image(getClass().getResourceAsStream("/icon/proggif.gif")));
-
-    }
-
-    public void executeCountTestPlan() {
-
-        progstatus_label.setText("Executing Test Plan...");
-        progressLoadingImage();
 
     }
 
@@ -1545,7 +1544,7 @@ public class MainStageController implements Initializable {
 //                System.out.println("Source Col: " + srcQuery.split(" ")[3] + " : " + srcQuery.split(" ")[3]);
                 countsMaxMinBean.srcCol.setValue(srcQuery.split(" ")[3]);
 
-                countsMaxMinBean.srcColCount.setValue(Integer.toString(Integer.parseInt(trgCnt) - Integer.parseInt(srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""))));
+                countsMaxMinBean.srcColCount.setValue(Integer.toString(Integer.parseInt(srcCnt) - Integer.parseInt(srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""))));
 
                 countsMaxMinBean.trgCol.setValue(trgQuery.split(" ")[3]);
                 countsMaxMinBean.trgColCount.setValue(Integer.toString(Integer.parseInt(trgCnt) - Integer.parseInt(trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""))));
@@ -1577,8 +1576,9 @@ public class MainStageController implements Initializable {
 
     //Methods to call the executeTestPlan method to fetch the Data --Adithya
     public void processTestPlan(List checkOptionData) {
-        System.out.println("getTestPlanData called");
-
+        System.out.println("processTestPlan called");
+        progstatus_label.setText("Executing Test Plan");
+        progressLoadingImage();
         for (Object item : checkOptionData) {
 
             System.out.println("Calling Check Option " + item.toString());
@@ -1829,6 +1829,8 @@ public class MainStageController implements Initializable {
                         //non ui code
                         //Calling the Plan Execution - sourceData_tbl_view not useful and need to pass a param
                         execueteTestPlan(stmData, item.toString(), cmpl_data_tesplan.get("Compl_Data_Src_Testcase"), cmpl_data_tesplan.get("Compl_Data_Trg_Testcase"), src_table, trg_table);
+                        ArrayList srcremovedList = (ArrayList) CollectionUtils.removeAll(srcCmplResult, trgCmplResult);
+                        ArrayList trgremovedList = (ArrayList) CollectionUtils.removeAll(trgCmplResult, srcCmplResult);
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
@@ -1836,11 +1838,37 @@ public class MainStageController implements Initializable {
                                 setColumnsTableView(targetData_tbl_view, trg_table);
                                 sourceData_tbl_view.setItems(srcCmplResult);
                                 targetData_tbl_view.setItems(trgCmplResult);
+
+                                System.out.println("Unmatch Source: " + unMatchsourceData_tbl_view);
+                                System.out.println("Unmatch Target: " + unMatchtargetData_tbl_view);
+                                setColumnsTableView(unMatchsourceData_tbl_view, src_table);
+                                setColumnsTableView(unMatchtargetData_tbl_view, trg_table);
+
+                                unMatchsourceData_tbl_view.getItems().clear();
+                                unMatchtargetData_tbl_view.getItems().clear();
+
+                                unMatchsourceData_tbl_view.getItems().addAll(srcremovedList);
+                                unMatchtargetData_tbl_view.getItems().addAll(trgremovedList);
+
                             }
                         });
                         return null;
                     }
                 };
+
+                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        if (unMatchsourceData_tbl_view.getItems().size() == 0 && unMatchtargetData_tbl_view.getItems().size() == 0) {
+                            dataValid_status_lbl.setText("Matched");
+                            dataValid_status_lbl.setStyle("-fx-background-color: green");
+                        } else {
+                            dataValid_status_lbl.setText("Unmatched");
+                            dataValid_status_lbl.setStyle("-fx-background-color: red");
+                        }
+                    }
+                });
 
                 Thread t = new Thread(task);
                 t.setDaemon(true);
@@ -1884,7 +1912,7 @@ public class MainStageController implements Initializable {
                 if (item == null || empty) {
                     setStyle("");
                 } else {
-                    System.out.println("CHecking :" + item.result.getValue());
+
                     //Now 'item' has all the info of the Person in this row
                     if (!item.result.getValue()) {
                         //We apply now the changes in all the cells of the row
