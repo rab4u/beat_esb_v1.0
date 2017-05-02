@@ -138,7 +138,7 @@ public class MainStageController implements Initializable {
     private Button autoresultrunbt;
 
     /*Code Created By the Adithya 29-04-2017 */
-    /*STM Table Data */
+ /*STM Table Data */
     @FXML
     private TextField stm_conTitle_txt_field, stm_conAut_txt_field, stm_conVer_txt_field;
 
@@ -167,7 +167,42 @@ public class MainStageController implements Initializable {
             unMatchtargetData_tbl_view;
 
     @FXML
+    private TableColumn src_count_tbl_col, trg_count_tbl_col, result_count_tbl_col, src_col_tbl_col, src_col_count_tbl_col, trg_col_tbl_col, trg_col_count_tbl_col, result_count_nulls_tbl_col,
+            cnt_null_src_col_tbl_col,
+            cnt_null_src_col_count_tbl_col,
+            cnt_null_trg_col_tbl_col,
+            cnt_null_trg_col_count_tbl_col,
+            cnt_null_result_count_nulls_tbl_col,
+            cnt_dup_src_col_tbl_col,
+            cnt_dup_src_col_count_tbl_col,
+            cnt_dup_trg_col_tbl_col,
+            cnt_dup_trg_col_count_tbl_col,
+            cnt_dup_result_count_nulls_tbl_col,
+            cnt_dis_src_col_tbl_col,
+            cnt_dis_src_col_count_tbl_col,
+            cnt_dis_trg_col_tbl_col,
+            cnt_dis_trg_col_count_tbl_col,
+            cnt_dis_result_count_tbl_col,
+            cnt_num_src_col_tbl_col,
+            cnt_num_src_col_count_tbl_col,
+            cnt_num_trg_col_tbl_col,
+            cnt_num_trg_col_count_tbl_col,
+            cnt_num_result_count_tbl_col,
+            cnt_max_src_col_tbl_col,
+            cnt_max_src_col_count_tbl_col,
+            cnt_max_trg_col_tbl_col,
+            cnt_max_trg_col_count_tbl_col,
+            cnt_max_result_count_tbl_col,
+            cnt_min_src_col_tbl_col,
+            cnt_min_src_col_count_tbl_col,
+            cnt_min_trg_col_tbl_col,
+            cnt_min_trg_col_count_tbl_col,
+            cnt_min_result_count_tbl_col;
+
+    @FXML
     private TableColumn tabPane_tbl_columns;
+
+    private TotalCountBean bean;
 
     private String srcCol;
     private String trgCol;
@@ -204,6 +239,21 @@ public class MainStageController implements Initializable {
     Map<String, String> frst_1000_testplan;
     Map<String, String> last_1000_testplan;
     Map<String, String> cmpl_data_tesplan;
+
+    //Test Plan Data
+    ObservableList<TotalCountBean> total_cnt_testplan_data;
+    ObservableList<CountsMaxMinBean> null_cnt_testplan_data;
+    ObservableList<CountsMaxMinBean> notnull_cnt_testplan_data;
+    ObservableList<CountsMaxMinBean> dup_cnt_testplan_data;
+    ObservableList<CountsMaxMinBean> dst_cnt_testplan_data;
+    ObservableList<CountsMaxMinBean> sum_num_testplan_data;
+    ObservableList<CountsMaxMinBean> max_col_testplan_data;
+    ObservableList<CountsMaxMinBean> min_col_testplan_data;
+    ObservableList<CountsMaxMinBean> frst_1000_testplan_data;
+    ObservableList<CountsMaxMinBean> last_1000_testplan_data;
+    ObservableList<CountsMaxMinBean> cmpl_data_tesplan_data;
+
+    private CSVSQLEngine csvengine;
 
     //file chooser
     final FileChooser fileChooser = new FileChooser();
@@ -243,16 +293,16 @@ public class MainStageController implements Initializable {
         //tab selector based test scenario
         testScenTabPane.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Tab>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
+            @Override
+            public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
 
-                        if (testScenTabPane.getSelectionModel().getSelectedItem().getText().equalsIgnoreCase("Advanced Test Scenarios")) {
-                            advanResultTabPane.getSelectionModel().select(advanResultTab);
-                        } else {
-                            advanResultTabPane.getSelectionModel().select(basicResultTab);
-                        }
-                    }
+                if (testScenTabPane.getSelectionModel().getSelectedItem().getText().equalsIgnoreCase("Advanced Test Scenarios")) {
+                    advanResultTabPane.getSelectionModel().select(advanResultTab);
+                } else {
+                    advanResultTabPane.getSelectionModel().select(basicResultTab);
                 }
+            }
+        }
         );
 
         //setting loading images to db / ff
@@ -447,9 +497,68 @@ public class MainStageController implements Initializable {
         });
 
         /*The below statements are used STM table */
-        stm_src_field_tbl_col.setCellValueFactory(new PropertyValueFactory<>("sourceFieldName"));
-        stm_src_tran_tbl_col.setCellValueFactory(new PropertyValueFactory<>("proposedTransRule"));
-        stm_trg_field_tbl_col.setCellValueFactory(new PropertyValueFactory<>("targetFieldName"));
+        stm_src_field_tbl_col.setCellValueFactory(new PropertyValueFactory<ESBStmBean, String>("sourceFieldName"));
+        stm_src_tran_tbl_col.setCellValueFactory(new PropertyValueFactory<ESBStmBean, String>("proposedTransRule"));
+        stm_trg_field_tbl_col.setCellValueFactory(new PropertyValueFactory<ESBStmBean, String>("targetFieldName"));
+
+        src_count_tbl_col.setCellValueFactory(new PropertyValueFactory<TotalCountBean, String>("srcCnt"));
+        trg_count_tbl_col.setCellValueFactory(new PropertyValueFactory<TotalCountBean, String>("trgCnt"));
+        result_count_tbl_col.setCellValueFactory(new PropertyValueFactory<TotalCountBean, String>("totCnt"));
+
+        total_cnt_testplan_data = FXCollections.observableArrayList();
+
+        //Null Count Coloumns
+        src_col_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("srcCol"));
+        src_col_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("srcColCount"));
+        trg_col_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("trgCol"));
+        trg_col_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("trgColCount"));
+        result_count_nulls_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("result"));
+        null_cnt_testplan_data = FXCollections.observableArrayList();
+
+        //NOt Null Count Coloumns
+        cnt_null_src_col_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("srcCol"));
+        cnt_null_src_col_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("srcColCount"));
+        cnt_null_trg_col_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("trgCol"));
+        cnt_null_trg_col_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("trgColCount"));
+        cnt_null_result_count_nulls_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("result"));
+        notnull_cnt_testplan_data = FXCollections.observableArrayList();
+
+        //Count Distinct
+        cnt_dup_src_col_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("srcCol"));
+        cnt_dup_src_col_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("srcColCount"));
+        cnt_dup_trg_col_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("trgCol"));
+        cnt_dup_trg_col_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("trgColCount"));
+        cnt_dup_result_count_nulls_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("result"));
+        dup_cnt_testplan_data = FXCollections.observableArrayList();
+
+        //Distinct 
+        cnt_dis_src_col_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("srcCol"));
+        cnt_dis_src_col_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("srcColCount"));
+        cnt_dis_trg_col_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("trgCol"));
+        cnt_dis_trg_col_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("trgColCount"));
+        cnt_dis_result_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("result"));
+        dst_cnt_testplan_data = FXCollections.observableArrayList();
+
+        cnt_num_src_col_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("srcCol"));
+        cnt_num_src_col_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("srcColData"));
+        cnt_num_trg_col_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("trgCol"));
+        cnt_num_trg_col_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("trgColCount"));
+        cnt_num_result_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("result"));
+        sum_num_testplan_data = FXCollections.observableArrayList();
+
+        cnt_max_src_col_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("srcCol"));
+        cnt_max_src_col_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("srcColCount"));
+        cnt_max_trg_col_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("trgCol"));
+        cnt_max_trg_col_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("trgColCount"));
+        cnt_max_result_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("result"));
+        max_col_testplan_data = FXCollections.observableArrayList();
+
+        cnt_min_src_col_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("srcCol"));
+        cnt_min_src_col_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("srcColCount"));
+        cnt_min_trg_col_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("trgCol"));
+        cnt_min_trg_col_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("trgColCount"));
+        cnt_min_result_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("result"));
+        min_col_testplan_data = FXCollections.observableArrayList();
 
     }
 
@@ -1060,7 +1169,7 @@ public class MainStageController implements Initializable {
     }
 
     private void generateTestplan(List ll) throws Exception {
-
+        csvengine = new CSVSQLEngine();
         progstatus_label.setText("Applying Source Transformations on Input File");
         progressLoadingImage();
 
@@ -1100,10 +1209,10 @@ public class MainStageController implements Initializable {
         Task task = new Task<Void>() {
             @Override
             public Void call() {
-				//non ui code
+                //non ui code
 
                 for (Object item : ll) {
-
+                    System.out.println("Calling: " + item.toString());
                     if (item.toString().equals("total_cnts")) {
 
                         if (getSourceType().equalsIgnoreCase("ff")) {
@@ -1117,13 +1226,14 @@ public class MainStageController implements Initializable {
                         } else {
                             total_cnt_testplan.put("Total_Cnt_Trg_Testcase", qgen.getTotalCntQueries(getDBNameFromUI("trg"), getTableNameFromUI("trg")));
                         }
-
+//Calling the Plan Execution
+                        execueteTestPlan(totalCounts_tbl_view, total_cnt_testplan_data, item.toString(), total_cnt_testplan.get("Total_Cnt_Src_Testcase").toString(), total_cnt_testplan.get("Total_Cnt_Trg_Testcase").toString(), src_table, trg_table);
                         System.out.println("Count Test Plan :" + total_cnt_testplan);
 
                     }
 
                     if (item.toString().equals("null_cnts")) {
-
+                        System.out.println("Null Cnts: " + item.toString());
                         //src and trg
                         for (int i = 0; i < src_table.size(); i++) {
 
@@ -1132,7 +1242,14 @@ public class MainStageController implements Initializable {
                             row = trg_table.get(i).toString();
                             null_cnt_testplan.put("Null_Cnt_Trg_Testcase_" + i, qgen.getNullCntQueries(getDBNameFromUI("trg"), getTableNameFromUI("trg"), row, getTargetType()));
                         }
+
                         System.out.println("Null Count Test Plan :" + null_cnt_testplan);
+                        for (int j = 0; j < null_cnt_testplan.size() / 2; j++) {
+                            System.out.println("Calling function : " + j);
+//Calling the Plan Execution
+                            execueteTestPlan(totalCounts_null_tbl_view, null_cnt_testplan_data, item.toString(), null_cnt_testplan.get("Null_Cnt_Src_Testcase_" + j), null_cnt_testplan.get("Null_Cnt_Trg_Testcase_" + j), src_table, trg_table);
+
+                        }
                     }
 
                     if (item.toString().equals("not_null_cnts")) {
@@ -1152,6 +1269,11 @@ public class MainStageController implements Initializable {
 
                         System.out.println("Not Null Count Test Plan :" + notnull_cnt_testplan);
 
+                        for (int j = 0; j < notnull_cnt_testplan.size() / 2; j++) {
+//Calling the Plan Execution
+                            execueteTestPlan(totalCountsnot_null_tbl_view, notnull_cnt_testplan_data, item.toString(), notnull_cnt_testplan.get("NotNull_Cnt_Src_Testcase_" + j), notnull_cnt_testplan.get("NotNull_Cnt_Trg_Testcase_" + j), src_table, trg_table);
+
+                        }
                     }
 
                     if (item.toString().equals("dst_cnts")) {
@@ -1170,12 +1292,15 @@ public class MainStageController implements Initializable {
                         }
 
                         System.out.println("Distinct Count Test Plan :" + dst_cnt_testplan);
+                        for (int j = 0; j < dst_cnt_testplan.size() / 2; j++) {
+                        //Calling the Plan Execution
+                            execueteTestPlan(countDistinct_tbl_view, dst_cnt_testplan_data, item.toString(), dst_cnt_testplan.get("Dst_Cnt_Src_Testcase_" + j), dst_cnt_testplan.get("Dst_Cnt_Trg_Testcase_" + j), src_table, trg_table);
 
+                        }
                     }
 
                     if (item.toString().equals("dup_cnts")) {
 
-                //Check in the Distinct Duplicates
                         //src and trg
                         for (int i = 0; i < src_table.size(); i++) {
 
@@ -1190,6 +1315,11 @@ public class MainStageController implements Initializable {
                         }
 
                         System.out.println("Duplicate Count Test Plan :" + dup_cnt_testplan);
+                        for (int j = 0; j < dup_cnt_testplan.size() / 2; j++) {
+                            //Calling the Plan Execution
+                            execueteTestPlan(countDupli_tbl_view, dup_cnt_testplan_data, item.toString(), dup_cnt_testplan.get("Dup_Cnt_Src_Testcase_" + j), dup_cnt_testplan.get("Dup_Cnt_Trg_Testcase_" + j), src_table, trg_table);
+
+                        }
 
                     }
 
@@ -1210,13 +1340,14 @@ public class MainStageController implements Initializable {
 
                         System.out.println("Max of Col Test Plan :" + max_col_testplan);
 
+                        for (int j = 0; j < max_col_testplan.size() / 2; j++) {
+//Calling the Plan Execution
+                            execueteTestPlan(max_tbl_view, max_col_testplan_data, item.toString(), max_col_testplan.get("Max_Col_Src_Testcase_" + j), max_col_testplan.get("Max_Col_Trg_Testcase_" + j), src_table, trg_table);
+
+                        }
                     }
 
                     if (item.toString().equals("min_cols")) {
-
-                //ObservableList src_table = srcsemikeycoltbl.getItems();
-                        //ObservableList trg_table = trgsemikeycoltbl.getItems();
-                        List testcase = new ArrayList();
 
                         //src and trg
                         for (int i = 0; i < src_table.size(); i++) {
@@ -1232,7 +1363,11 @@ public class MainStageController implements Initializable {
                         }
 
                         System.out.println("Min of Col Test Plan :" + min_col_testplan);
+                        for (int j = 0; j < min_col_testplan.size() / 2; j++) {
+//Calling the Plan Execution
+                            execueteTestPlan(min_tbl_view, min_col_testplan_data, item.toString(), min_col_testplan.get("Min_Col_Src_Testcase_" + j), min_col_testplan.get("Min_Col_Trg_Testcase_" + j), src_table, trg_table);
 
+                        }
                     }
 
                     if (item.toString().equals("sum_num_cols")) {
@@ -1262,6 +1397,11 @@ public class MainStageController implements Initializable {
 
                         System.out.println("Sum of Col Test Plan :" + sum_num_testplan);
 
+                        for (int j = 0; j < sum_num_testplan.size() / 2; j++) {
+//Calling the Plan Execution
+                            execueteTestPlan(countNumerics_tbl_view, sum_num_testplan_data, item.toString(), sum_num_testplan.get("Sum_Col_Src_Testcase_" + j), sum_num_testplan.get("Sum_Col_Trg_Testcase_" + j), src_table, trg_table);
+
+                        }
                     }
 
                     /*Fetch the Complete records */
@@ -1290,6 +1430,8 @@ public class MainStageController implements Initializable {
                         }
 
                         System.out.println("Complete Data :" + cmpl_data_tesplan);
+                        //Calling the Plan Execution
+                        execueteTestPlan(max_tbl_view, stmData, item.toString(), cmpl_data_tesplan.get("Compl_Data_Src_Testcase"), cmpl_data_tesplan.get("Compl_Data_Trg_Testcase"), src_table, trg_table);
 
                     }
 
@@ -1300,7 +1442,7 @@ public class MainStageController implements Initializable {
                         //ui code
                         progstatus_label.setText("Generating Test Plan");
                         progressLoadingImage();
-                        
+
                     }
                 });
                 return null;
@@ -1317,8 +1459,8 @@ public class MainStageController implements Initializable {
         task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent event) {
-                
-        progstatus_label.setText("Test Plan Generated");
+
+                progstatus_label.setText("Test Plan Generated");
                 progressCompletedImage();
             }
         });
@@ -1326,7 +1468,6 @@ public class MainStageController implements Initializable {
         Thread t = new Thread(task);
         t.setDaemon(true);
         t.start();
-
 
     }
 
@@ -1395,12 +1536,12 @@ public class MainStageController implements Initializable {
     //
 
     /*Method to set Columns Dynamically to the Multiple Table View --Adithya 30-04-2017*/
-    public void setColumnsTableView(TableView tableView, ObservableList<String> tableColumns) {
+    public void setColumnsTableView(TableView tableView, List tableColumns) {
         System.out.println("setTableView method Called");
         if (!tableColumns.isEmpty()) {
-            for (String tableColumn : tableColumns) {
-                tabPane_tbl_columns = new TableColumn(tableColumn);
-                tabPane_tbl_columns.setCellValueFactory(new PropertyValueFactory(tableColumn));
+            for (Object tableColumn : tableColumns) {
+                tabPane_tbl_columns = new TableColumn(tableColumn.toString());
+                tabPane_tbl_columns.setCellValueFactory(new PropertyValueFactory(tableColumn.toString()));
                 tableView.getColumns().add(tabPane_tbl_columns);
             }
         } else {
@@ -1423,6 +1564,7 @@ public class MainStageController implements Initializable {
 
     }
 
+    //Method to Check only One Check box in Advance tab
     private void configureCheckBox(CheckBox checkBox) {
 
         if (checkBox.isSelected()) {
@@ -1441,6 +1583,66 @@ public class MainStageController implements Initializable {
             }
 
         });
+
+    }
+
+    //Method to execute and fetch the data of the test plan --Adithya
+    public void execueteTestPlan(TableView tableView, ObservableList dataStore, String item, String srcQuery, String trgQuery, List srcHeader, List trgHeader) {
+        System.out.println("execueteTestPlan Called");
+        System.out.println("Option: " + item);
+        System.out.println("SRC File: " + srcfile + " : src Query: " + srcQuery);
+        System.out.println("TRG File: " + trgfile + " : trg Query: " + trgQuery);
+
+        try {
+            ObservableList srcResult = csvengine.getFFTableData(srcfile, srcQuery);
+            ObservableList trgResult = csvengine.getFFTableData(trgfile, trgQuery);
+            if (item.equals("total_cnts")) {
+
+                System.out.println("SRC Count: " + srcResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                System.out.println("trg Count: " + trgResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                if (bean == null) {
+                    bean = new TotalCountBean();
+                    bean.srcCnt.setValue(srcResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                    bean.trgCnt.setValue(trgResult.get(0).toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+
+                    bean.totCnt.setValue(bean.getSrcCnt().equals(bean.getTrgCnt()));
+
+                    total_cnt_testplan_data.add(bean);
+                }
+
+                System.out.println("List: " + total_cnt_testplan_data.toString());
+                tableView.setItems(total_cnt_testplan_data);
+
+            } else if (item.equals("cmpl_data")) {
+
+                System.out.println("Src Data : " + srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                System.out.println("Target Data: " + trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                setColumnsTableView(sourceData_tbl_view, srcHeader);
+                setColumnsTableView(targetData_tbl_view, trgHeader);
+                sourceData_tbl_view.setItems(srcResult);
+                targetData_tbl_view.setItems(trgResult);
+
+            } else {
+
+                System.out.println("MinMAx Count: " + srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                System.out.println("MinMax Count: " + trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                CountsMaxMinBean countsMaxMinBean = new CountsMaxMinBean();
+                System.out.println("Source Col: " + srcQuery.split(" ")[3] + " : " + srcQuery.split(" ")[3]);
+                countsMaxMinBean.srcCol.setValue(srcQuery.split(" ")[3]);
+                countsMaxMinBean.srcColCount.setValue(srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                countsMaxMinBean.trgCol.setValue(trgQuery.split(" ")[3]);
+                countsMaxMinBean.trgColCount.setValue(trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                countsMaxMinBean.result.setValue(countsMaxMinBean.getSrcColCount().equals(countsMaxMinBean.getTrgColCount()));
+
+                dataStore.add(countsMaxMinBean);
+
+                System.out.println(dataStore.get(0));
+                tableView.setItems(dataStore);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

@@ -408,6 +408,11 @@
                                                                                              <columnResizePolicy>
                                                                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                                                                              </columnResizePolicy>
+                                                                                             <columns>
+                                                                                                <TableColumn fx:id="src_count_tbl_col" prefWidth="75.0" text="Source Count" />
+                                                                                                <TableColumn fx:id="trg_count_tbl_col" prefWidth="75.0" text="Target Count" />
+                                                                                                <TableColumn fx:id="result_count_tbl_col" prefWidth="75.0" text="Result" />
+                                                                                             </columns>
                                                                                           </TableView>
                                                                                        </children>
                                                                                     </AnchorPane>
@@ -417,7 +422,17 @@
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
-                                                                                          <TableView fx:id="totalCounts_null_tbl_view" prefHeight="84.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                                                          <TableView fx:id="totalCounts_null_tbl_view" prefHeight="84.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                                             <columns>
+                                                                                                <TableColumn fx:id="src_col_tbl_col" prefWidth="75.0" text="Source Column" />
+                                                                                                <TableColumn fx:id="src_col_count_tbl_col" prefWidth="75.0" text="Source Null Count" />
+                                                                                                <TableColumn fx:id="trg_col_tbl_col" prefWidth="75.0" text="Target Column" />
+                                                                                                <TableColumn fx:id="trg_col_count_tbl_col" prefWidth="75.0" text="Target Null Count" />
+                                                                                                <TableColumn fx:id="result_count_nulls_tbl_col" prefWidth="75.0" text="Result" />
+                                                                                             </columns>
+                                                                                             <columnResizePolicy>
+                                                                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                                                             </columnResizePolicy></TableView>
                                                                                        </children>
                                                                                     </AnchorPane>
                                                                                  </content>
@@ -426,7 +441,17 @@
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
-                                                                                          <TableView fx:id="totalCountsnot_null_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                          <TableView fx:id="totalCountsnot_null_tbl_view" prefHeight="84.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                                             <columnResizePolicy>
+                                                                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                                                             </columnResizePolicy>
+                                                                                             <columns>
+                                                                                                <TableColumn fx:id="cnt_null_src_col_tbl_col" prefWidth="75.0" text="Source Column" />
+                                                                                                <TableColumn fx:id="cnt_null_src_col_count_tbl_col" prefWidth="75.0" text="Source Not Null Count" />
+                                                                                                <TableColumn fx:id="cnt_null_trg_col_tbl_col" prefWidth="75.0" text="Target Column" />
+                                                                                                <TableColumn fx:id="cnt_null_trg_col_count_tbl_col" prefWidth="75.0" text="Target Not Null Count" />
+                                                                                                <TableColumn fx:id="cnt_null_result_count_nulls_tbl_col" prefWidth="75.0" text="Result" />
+                                                                                             </columns></TableView>
                                                                                        </children>
                                                                                     </AnchorPane>
                                                                                  </content>
@@ -435,7 +460,17 @@
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
-                                                                                          <TableView fx:id="countDupli_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                          <TableView fx:id="countDupli_tbl_view" prefHeight="84.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                                             <columns>
+                                                                                                <TableColumn fx:id="cnt_dup_src_col_tbl_col" prefWidth="75.0" text="Source Column" />
+                                                                                                <TableColumn fx:id="cnt_dup_src_col_count_tbl_col" prefWidth="75.0" text="Source Duplicates Count" />
+                                                                                                <TableColumn fx:id="cnt_dup_trg_col_tbl_col" prefWidth="75.0" text="Target Column" />
+                                                                                                <TableColumn fx:id="cnt_dup_trg_col_count_tbl_col" prefWidth="75.0" text="Target Duplicates  Count" />
+                                                                                                <TableColumn fx:id="cnt_dup_result_count_nulls_tbl_col" prefWidth="75.0" text="Result" />
+                                                                                             </columns>
+                                                                                             <columnResizePolicy>
+                                                                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                                                             </columnResizePolicy></TableView>
                                                                                        </children>
                                                                                     </AnchorPane>
                                                                                  </content>
@@ -444,7 +479,17 @@
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
-                                                                                          <TableView fx:id="countDistinct_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                          <TableView fx:id="countDistinct_tbl_view" prefHeight="84.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                                             <columns>
+                                                                                                <TableColumn fx:id="cnt_dis_src_col_tbl_col" prefWidth="75.0" text="Source Column" />
+                                                                                                <TableColumn fx:id="cnt_dis_src_col_count_tbl_col" prefWidth="75.0" text="Source Distinct Count" />
+                                                                                                <TableColumn fx:id="cnt_dis_trg_col_tbl_col" prefWidth="75.0" text="Target Column" />
+                                                                                                <TableColumn fx:id="cnt_dis_trg_col_count_tbl_col" prefWidth="75.0" text="Target Distinct Count" />
+                                                                                                <TableColumn fx:id="cnt_dis_result_count_tbl_col" prefWidth="75.0" text="Result" />
+                                                                                             </columns>
+                                                                                             <columnResizePolicy>
+                                                                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                                                             </columnResizePolicy></TableView>
                                                                                        </children>
                                                                                     </AnchorPane>
                                                                                  </content>
@@ -453,7 +498,17 @@
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
-                                                                                          <TableView fx:id="countNumerics_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                          <TableView fx:id="countNumerics_tbl_view" prefHeight="84.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                                             <columns>
+                                                                                                <TableColumn fx:id="cnt_num_src_col_tbl_col" prefWidth="75.0" text="Source Column" />
+                                                                                                <TableColumn fx:id="cnt_num_src_col_count_tbl_col" prefWidth="75.0" text="Source Numeric Count" />
+                                                                                                <TableColumn fx:id="cnt_num_trg_col_tbl_col" prefWidth="75.0" text="Target Column" />
+                                                                                                <TableColumn fx:id="cnt_num_trg_col_count_tbl_col" prefWidth="75.0" text="Target Numeric Count" />
+                                                                                                <TableColumn fx:id="cnt_num_result_count_tbl_col" prefWidth="75.0" text="Result" />
+                                                                                             </columns>
+                                                                                             <columnResizePolicy>
+                                                                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                                                             </columnResizePolicy></TableView>
                                                                                        </children>
                                                                                     </AnchorPane>
                                                                                  </content>
@@ -462,7 +517,17 @@
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
-                                                                                          <TableView fx:id="max_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                          <TableView fx:id="max_tbl_view" prefHeight="84.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                                             <columns>
+                                                                                                <TableColumn fx:id="cnt_max_src_col_tbl_col" prefWidth="75.0" text="Source Column" />
+                                                                                                <TableColumn fx:id="cnt_max_src_col_count_tbl_col" prefWidth="75.0" text="Source Max Count" />
+                                                                                                <TableColumn fx:id="cnt_max_trg_col_tbl_col" prefWidth="75.0" text="Target Column" />
+                                                                                                <TableColumn fx:id="cnt_max_trg_col_count_tbl_col" prefWidth="75.0" text="Target Max Count" />
+                                                                                                <TableColumn fx:id="cnt_max_result_count_tbl_col" prefWidth="75.0" text="Result" />
+                                                                                             </columns>
+                                                                                             <columnResizePolicy>
+                                                                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                                                             </columnResizePolicy></TableView>
                                                                                        </children>
                                                                                     </AnchorPane>
                                                                                  </content>
@@ -471,7 +536,17 @@
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
-                                                                                          <TableView fx:id="min_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                          <TableView fx:id="min_tbl_view" prefHeight="84.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                                             <columns>
+                                                                                                <TableColumn fx:id="cnt_min_src_col_tbl_col" prefWidth="75.0" text="Source Column" />
+                                                                                                <TableColumn fx:id="cnt_min_src_col_count_tbl_col" prefWidth="75.0" text="Source Min Count" />
+                                                                                                <TableColumn fx:id="cnt_min_trg_col_tbl_col" prefWidth="75.0" text="Target Column" />
+                                                                                                <TableColumn fx:id="cnt_min_trg_col_count_tbl_col" prefWidth="75.0" text="Target MinCount" />
+                                                                                                <TableColumn fx:id="cnt_min_result_count_tbl_col" prefWidth="75.0" text="Result" />
+                                                                                             </columns>
+                                                                                             <columnResizePolicy>
+                                                                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                                                             </columnResizePolicy></TableView>
                                                                                        </children>
                                                                                     </AnchorPane>
                                                                                  </content>
@@ -488,7 +563,7 @@
                                                                                  <content>
                                                                                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                                                        <children>
-                                                                                          <TableView fx:id="sourceData_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                          <TableView fx:id="sourceData_tbl_view" prefHeight="84.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                                                        </children>
                                                                                     </AnchorPane>
                                                                                  </content>
@@ -497,7 +572,7 @@
                                                                                  <content>
                                                                                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                                                        <children>
-                                                                                          <TableView fx:id="targetData_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                          <TableView fx:id="targetData_tbl_view" prefHeight="84.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                                                        </children>
                                                                                     </AnchorPane>
                                                                                  </content>
@@ -510,7 +585,10 @@
                                                                                              <content>
                                                                                                 <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                                                                    <children>
-                                                                                                      <TableView fx:id="unsourceData_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                                      <TableView fx:id="unsourceData_tbl_view" prefHeight="55.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                                                         <columnResizePolicy>
+                                                                                                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                                                                         </columnResizePolicy></TableView>
                                                                                                    </children>
                                                                                                 </AnchorPane>
                                                                                              </content>
@@ -519,7 +597,10 @@
                                                                                              <content>
                                                                                                 <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                                                                    <children>
-                                                                                                      <TableView fx:id="unMatchtargetData_tbl_view" prefHeight="84.0" prefWidth="270.0" />
+                                                                                                      <TableView fx:id="unMatchtargetData_tbl_view" prefHeight="55.0" prefWidth="270.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                                                         <columnResizePolicy>
+                                                                                                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                                                                         </columnResizePolicy></TableView>
                                                                                                    </children>
                                                                                                 </AnchorPane>
                                                                                              </content>
