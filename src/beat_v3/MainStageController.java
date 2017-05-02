@@ -262,6 +262,11 @@ public class MainStageController implements Initializable {
     private String srcfile;
     private String trgfile;
 
+    //List to Store the Headers 
+    private List src_table;
+    private List trg_table;
+    
+
     @FXML
     private void dbAddButtonAction(ActionEvent event) {
 
@@ -559,6 +564,11 @@ public class MainStageController implements Initializable {
         cnt_min_trg_col_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("trgColCount"));
         cnt_min_result_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("result"));
         min_col_testplan_data = FXCollections.observableArrayList();
+        
+        
+        
+          
+
 
     }
 
@@ -1021,6 +1031,7 @@ public class MainStageController implements Initializable {
     public void autoResultRunButtonAction() throws Exception {
 
         List ll = getSelectedTestCases();
+        
         System.out.println("Selected TestCases : " + ll);
 
         List testplan = new ArrayList();
@@ -1203,8 +1214,8 @@ public class MainStageController implements Initializable {
         cmpl_data_tesplan = new HashMap<String, String>();
         last_1000_testplan = new HashMap<String, String>();
 
-        List src_table = cssqleng.getFFColumns(this.getConnNameFromUI("src"), "select * from " + this.getTableNameFromUI("src"));
-        List trg_table = cssqleng.getFFColumns(this.getConnNameFromUI("trg"), "select * from " + this.getTableNameFromUI("trg"));
+        src_table = cssqleng.getFFColumns(this.getConnNameFromUI("src"), "select * from " + this.getTableNameFromUI("src"));
+        trg_table = cssqleng.getFFColumns(this.getConnNameFromUI("trg"), "select * from " + this.getTableNameFromUI("trg"));
 
         Task task = new Task<Void>() {
             @Override
@@ -1226,8 +1237,7 @@ public class MainStageController implements Initializable {
                         } else {
                             total_cnt_testplan.put("Total_Cnt_Trg_Testcase", qgen.getTotalCntQueries(getDBNameFromUI("trg"), getTableNameFromUI("trg")));
                         }
-//Calling the Plan Execution
-                        execueteTestPlan(totalCounts_tbl_view, total_cnt_testplan_data, item.toString(), total_cnt_testplan.get("Total_Cnt_Src_Testcase").toString(), total_cnt_testplan.get("Total_Cnt_Trg_Testcase").toString(), src_table, trg_table);
+
                         System.out.println("Count Test Plan :" + total_cnt_testplan);
 
                     }
@@ -1244,12 +1254,7 @@ public class MainStageController implements Initializable {
                         }
 
                         System.out.println("Null Count Test Plan :" + null_cnt_testplan);
-                        for (int j = 0; j < null_cnt_testplan.size() / 2; j++) {
-                            System.out.println("Calling function : " + j);
-//Calling the Plan Execution
-                            execueteTestPlan(totalCounts_null_tbl_view, null_cnt_testplan_data, item.toString(), null_cnt_testplan.get("Null_Cnt_Src_Testcase_" + j), null_cnt_testplan.get("Null_Cnt_Trg_Testcase_" + j), src_table, trg_table);
 
-                        }
                     }
 
                     if (item.toString().equals("not_null_cnts")) {
@@ -1269,11 +1274,6 @@ public class MainStageController implements Initializable {
 
                         System.out.println("Not Null Count Test Plan :" + notnull_cnt_testplan);
 
-                        for (int j = 0; j < notnull_cnt_testplan.size() / 2; j++) {
-//Calling the Plan Execution
-                            execueteTestPlan(totalCountsnot_null_tbl_view, notnull_cnt_testplan_data, item.toString(), notnull_cnt_testplan.get("NotNull_Cnt_Src_Testcase_" + j), notnull_cnt_testplan.get("NotNull_Cnt_Trg_Testcase_" + j), src_table, trg_table);
-
-                        }
                     }
 
                     if (item.toString().equals("dst_cnts")) {
@@ -1292,11 +1292,7 @@ public class MainStageController implements Initializable {
                         }
 
                         System.out.println("Distinct Count Test Plan :" + dst_cnt_testplan);
-                        for (int j = 0; j < dst_cnt_testplan.size() / 2; j++) {
-                        //Calling the Plan Execution
-                            execueteTestPlan(countDistinct_tbl_view, dst_cnt_testplan_data, item.toString(), dst_cnt_testplan.get("Dst_Cnt_Src_Testcase_" + j), dst_cnt_testplan.get("Dst_Cnt_Trg_Testcase_" + j), src_table, trg_table);
 
-                        }
                     }
 
                     if (item.toString().equals("dup_cnts")) {
@@ -1315,11 +1311,6 @@ public class MainStageController implements Initializable {
                         }
 
                         System.out.println("Duplicate Count Test Plan :" + dup_cnt_testplan);
-                        for (int j = 0; j < dup_cnt_testplan.size() / 2; j++) {
-                            //Calling the Plan Execution
-                            execueteTestPlan(countDupli_tbl_view, dup_cnt_testplan_data, item.toString(), dup_cnt_testplan.get("Dup_Cnt_Src_Testcase_" + j), dup_cnt_testplan.get("Dup_Cnt_Trg_Testcase_" + j), src_table, trg_table);
-
-                        }
 
                     }
 
@@ -1340,11 +1331,6 @@ public class MainStageController implements Initializable {
 
                         System.out.println("Max of Col Test Plan :" + max_col_testplan);
 
-                        for (int j = 0; j < max_col_testplan.size() / 2; j++) {
-//Calling the Plan Execution
-                            execueteTestPlan(max_tbl_view, max_col_testplan_data, item.toString(), max_col_testplan.get("Max_Col_Src_Testcase_" + j), max_col_testplan.get("Max_Col_Trg_Testcase_" + j), src_table, trg_table);
-
-                        }
                     }
 
                     if (item.toString().equals("min_cols")) {
@@ -1363,11 +1349,7 @@ public class MainStageController implements Initializable {
                         }
 
                         System.out.println("Min of Col Test Plan :" + min_col_testplan);
-                        for (int j = 0; j < min_col_testplan.size() / 2; j++) {
-//Calling the Plan Execution
-                            execueteTestPlan(min_tbl_view, min_col_testplan_data, item.toString(), min_col_testplan.get("Min_Col_Src_Testcase_" + j), min_col_testplan.get("Min_Col_Trg_Testcase_" + j), src_table, trg_table);
 
-                        }
                     }
 
                     if (item.toString().equals("sum_num_cols")) {
@@ -1397,11 +1379,6 @@ public class MainStageController implements Initializable {
 
                         System.out.println("Sum of Col Test Plan :" + sum_num_testplan);
 
-                        for (int j = 0; j < sum_num_testplan.size() / 2; j++) {
-//Calling the Plan Execution
-                            execueteTestPlan(countNumerics_tbl_view, sum_num_testplan_data, item.toString(), sum_num_testplan.get("Sum_Col_Src_Testcase_" + j), sum_num_testplan.get("Sum_Col_Trg_Testcase_" + j), src_table, trg_table);
-
-                        }
                     }
 
                     /*Fetch the Complete records */
@@ -1430,8 +1407,6 @@ public class MainStageController implements Initializable {
                         }
 
                         System.out.println("Complete Data :" + cmpl_data_tesplan);
-                        //Calling the Plan Execution
-                        execueteTestPlan(max_tbl_view, stmData, item.toString(), cmpl_data_tesplan.get("Compl_Data_Src_Testcase"), cmpl_data_tesplan.get("Compl_Data_Trg_Testcase"), src_table, trg_table);
 
                     }
 
@@ -1642,6 +1617,105 @@ public class MainStageController implements Initializable {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+    }
+
+    //Methods to call the executeTestPlan method to fetch the Data --Adithya
+    public void getTestPlanData(List checkOptionData) {
+        System.out.println("getTestPlanData called");
+        for (Object item : checkOptionData) {
+            System.out.println("Calling Check Option " + item.toString());
+            if (item.toString().equals("total_cnts")) {
+
+//Calling the Plan Execution
+//                execueteTestPlan(totalCounts_tbl_view, total_cnt_testplan_data, item.toString(), total_cnt_testplan.get("Total_Cnt_Src_Testcase").toString(), total_cnt_testplan.get("Total_Cnt_Trg_Testcase").toString(), src_table, trg_table);
+                System.out.println("Count Test Plan :" + total_cnt_testplan);
+
+            }
+
+            if (item.toString().equals("null_cnts")) {
+
+                System.out.println("Null Count Test Plan :" + null_cnt_testplan);
+                for (int j = 0; j < null_cnt_testplan.size() / 2; j++) {
+                    System.out.println("SRC Test : " + null_cnt_testplan.get("Null_Cnt_Src_Testcase_" + j));
+//Calling the Plan Execution
+                    execueteTestPlan(totalCounts_null_tbl_view, null_cnt_testplan_data, item.toString(), null_cnt_testplan.get("Null_Cnt_Src_Testcase_" + j), null_cnt_testplan.get("Null_Cnt_Trg_Testcase_" + j), src_table, trg_table);
+
+                }
+            }
+
+            if (item.toString().equals("not_null_cnts")) {
+
+                System.out.println("Not Null Count Test Plan :" + notnull_cnt_testplan);
+
+                for (int j = 0; j < notnull_cnt_testplan.size() / 2; j++) {
+//Calling the Plan Execution
+                    execueteTestPlan(totalCountsnot_null_tbl_view, notnull_cnt_testplan_data, item.toString(), notnull_cnt_testplan.get("NotNull_Cnt_Src_Testcase_" + j), notnull_cnt_testplan.get("NotNull_Cnt_Trg_Testcase_" + j), src_table, trg_table);
+
+                }
+            }
+
+            if (item.toString().equals("dst_cnts")) {
+
+                System.out.println("Distinct Count Test Plan :" + dst_cnt_testplan);
+                for (int j = 0; j < dst_cnt_testplan.size() / 2; j++) {
+                    //Calling the Plan Execution
+                    execueteTestPlan(countDistinct_tbl_view, dst_cnt_testplan_data, item.toString(), dst_cnt_testplan.get("Dst_Cnt_Src_Testcase_" + j), dst_cnt_testplan.get("Dst_Cnt_Trg_Testcase_" + j), src_table, trg_table);
+
+                }
+            }
+
+            if (item.toString().equals("dup_cnts")) {
+
+                System.out.println("Duplicate Count Test Plan :" + dup_cnt_testplan);
+                for (int j = 0; j < dup_cnt_testplan.size() / 2; j++) {
+                    //Calling the Plan Execution
+                    execueteTestPlan(countDupli_tbl_view, dup_cnt_testplan_data, item.toString(), dup_cnt_testplan.get("Dup_Cnt_Src_Testcase_" + j), dup_cnt_testplan.get("Dup_Cnt_Trg_Testcase_" + j), src_table, trg_table);
+
+                }
+
+            }
+
+            if (item.toString().equals("max_cols")) {
+
+                System.out.println("Max of Col Test Plan :" + max_col_testplan);
+
+                for (int j = 0; j < max_col_testplan.size() / 2; j++) {
+//Calling the Plan Execution
+                    execueteTestPlan(max_tbl_view, max_col_testplan_data, item.toString(), max_col_testplan.get("Max_Col_Src_Testcase_" + j), max_col_testplan.get("Max_Col_Trg_Testcase_" + j), src_table, trg_table);
+
+                }
+            }
+
+            if (item.toString().equals("min_cols")) {
+
+                System.out.println("Min of Col Test Plan :" + min_col_testplan);
+                for (int j = 0; j < min_col_testplan.size() / 2; j++) {
+//Calling the Plan Execution
+                    execueteTestPlan(min_tbl_view, min_col_testplan_data, item.toString(), min_col_testplan.get("Min_Col_Src_Testcase_" + j), min_col_testplan.get("Min_Col_Trg_Testcase_" + j), src_table, trg_table);
+
+                }
+            }
+
+            if (item.toString().equals("sum_num_cols")) {
+
+                for (int j = 0; j < sum_num_testplan.size() / 2; j++) {
+                    //Calling the Plan Execution
+                    execueteTestPlan(countNumerics_tbl_view, sum_num_testplan_data, item.toString(), sum_num_testplan.get("Sum_Col_Src_Testcase_" + j), sum_num_testplan.get("Sum_Col_Trg_Testcase_" + j), src_table, trg_table);
+
+                }
+            }
+
+            /*Fetch the Complete records */
+            if (item.toString().equals("cmpl_data")) {
+
+                System.out.println("Complete Data :" + cmpl_data_tesplan);
+                //Calling the Plan Execution
+                execueteTestPlan(sourceData_tbl_view, stmData, item.toString(), cmpl_data_tesplan.get("Compl_Data_Src_Testcase"), cmpl_data_tesplan.get("Compl_Data_Trg_Testcase"), src_table, trg_table);
+
+            }
+
         }
 
     }

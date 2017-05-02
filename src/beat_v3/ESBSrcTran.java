@@ -11,11 +11,8 @@ import java.nio.file.StandardCopyOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
 /**
@@ -100,13 +97,13 @@ public class ESBSrcTran {
                                 for (String string : col) {
                                     String ds = string.replaceAll("\\[", "").replaceAll("\\]", "").substring(Integer.parseInt(stmPropTransRul1.split(",")[0]), Integer.parseInt(stmPropTransRul1.split(",")[1]));
                                     indiOrdernum.add(ds);
-                                    System.out.println("order Num: " + ds + " : " + col);
+
                                 }
                             } else {
                                 String ds = o.toString().replaceAll("\\[", "").replaceAll("\\]", "").substring(Integer.parseInt(stmPropTransRul1.split(",")[0]), Integer.parseInt(stmPropTransRul1.split(",")[1]));
 
                                 indiOrdernum.add(ds);
-                                System.out.println("order Num: " + ds + " : " + col);
+
                             }
 
                         }
@@ -212,21 +209,20 @@ public class ESBSrcTran {
 
             ObservableList dd = (ObservableList) object;
             String[] singleData = dd.toString().split(",");
-            System.out.println(singleData.length);
+
             for (int i = 0, m = 0; i < singleData.length; i++, m++) {
 
                 String data_check = singleData[i].replaceAll(" ", "").replaceAll("\\[", "").replaceAll("\\]", "").trim();
 
                 if (data_check.matches("[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,4}[0-9]{1,2}:[0-9]{1,2}(am|pm)")) {
 
-                    System.out.println("Transformation Rule: " + dateTrans.get(m));
+//                    System.out.println("Transformation Rule: " + dateTrans.get(m));
                     String da = singleData[i].replaceAll("\\[", "").replaceAll("\\]", "");
-                    System.out.println("Date: " + da);
+//                    System.out.println("Date: " + da);
                     Date d = new SimpleDateFormat("MM/dd/yyyy hh:mma").parse(da);
                     singleData[i] = new SimpleDateFormat(dateTrans.get(m)).format(d);
 
-                    System.out.println("Date Time : " + singleData[i]);
-
+//                    System.out.println("Date Time : " + singleData[i]);
                 }
 
             }
@@ -281,4 +277,9 @@ public class ESBSrcTran {
         Files.copy(original, target, StandardCopyOption.REPLACE_EXISTING);
 
     }
+
+    public String getSrcHeader() {
+        return srcHeader.toString();
+    }
+
 }
