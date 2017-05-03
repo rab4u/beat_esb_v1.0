@@ -2040,16 +2040,18 @@ public class MainStageController implements Initializable {
 
                                 System.out.println("Unmatch Source: " + unMatchsourceData_tbl_view);
                                 System.out.println("Unmatch Target: " + unMatchtargetData_tbl_view);
-                                setColumnsTableView(unMatchsourceData_tbl_view, src_table);
-                                setColumnsTableView(unMatchtargetData_tbl_view, trg_table);
-
                                 unMatchsourceData_tbl_view.getItems().clear();
                                 unMatchtargetData_tbl_view.getItems().clear();
                                 unMatchsourceData_tbl_view.getColumns().clear();
                                 unMatchtargetData_tbl_view.getColumns().clear();
 
-                                unMatchsourceData_tbl_view.getItems().addAll(srcremovedList);
-                                unMatchtargetData_tbl_view.getItems().addAll(trgremovedList);
+                                setColumnsTableView(unMatchsourceData_tbl_view, src_table);
+                                setColumnsTableView(unMatchtargetData_tbl_view, trg_table);
+
+                                ObservableList src = FXCollections.observableArrayList(srcremovedList);
+                                ObservableList trg = FXCollections.observableArrayList(trgremovedList);
+                                unMatchsourceData_tbl_view.setItems(src);
+                                unMatchtargetData_tbl_view.setItems(trg);
 
                             }
                         });
@@ -2092,6 +2094,13 @@ public class MainStageController implements Initializable {
             }
 
         }
+
+        //File Deletions
+        File src = new File(getConnNameFromUI("src"));
+        src.deleteOnExit();
+
+        File trg = new File(getConnNameFromUI("trg"));
+        trg.deleteOnExit();
 
     }
 
