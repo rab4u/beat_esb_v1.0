@@ -54,7 +54,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import jxl.Workbook;
 import jxl.read.biff.BiffException;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
 import org.apache.commons.collections4.CollectionUtils;
 
 /**
@@ -134,7 +138,8 @@ public class MainStageController implements Initializable {
     @FXML
     private SplitPane workspaceSplitPane;
     @FXML
-    private Button autoresultrunbt;
+    private Button autoresultrunbt, result_save_btn, result_clear_btn;
+
 
     /*Code Created By the Adithya 29-04-2017 */
  /*STM Table Data */
@@ -214,6 +219,7 @@ public class MainStageController implements Initializable {
 
     private IntegerBinding numCheckBoxesSelected = Bindings.size(selectedCheckBoxes);
 
+    private File esbStmFile;
     private final int maxNumSelected = 1;
 
     private CSVSQLEngine cssqleng;
@@ -251,6 +257,8 @@ public class MainStageController implements Initializable {
     ObservableList<CountsMaxMinBean> frst_1000_testplan_data;
     ObservableList<CountsMaxMinBean> last_1000_testplan_data;
     ObservableList<CountsMaxMinBean> cmpl_data_tesplan_data;
+
+    private Map<String, TableView> resultTableList;
 
     private CSVSQLEngine csvengine;
 
@@ -571,6 +579,7 @@ public class MainStageController implements Initializable {
         cnt_min_result_count_tbl_col.setCellValueFactory(new PropertyValueFactory<CountsMaxMinBean, String>("result"));
         min_col_testplan_data = FXCollections.observableArrayList();
 
+        resultTableList = new HashMap<String, TableView>();
     }
 
     private void dbtree_SelectionChanged(TreeItem<String> nodeselect) {
@@ -1372,10 +1381,9 @@ public class MainStageController implements Initializable {
                 progstatus_label.setText("Test Plan Generated");
                 progressCompletedImage();
                 processTestPlan(ll);
-                progstatus_label.setText("Execution Completed");
-                progressCompletedImage();
 
             }
+
         });
 
         Thread t = new Thread(task);
@@ -1401,13 +1409,13 @@ public class MainStageController implements Initializable {
 
         System.out.println("Clicked - esbStmImportButton");
         Stage mainstage = (Stage) mainvbox.getScene().getWindow();
-        File file = fileChooser.showOpenDialog(mainstage);
+        esbStmFile = fileChooser.showOpenDialog(mainstage);
 
-        System.out.println("File - " + file);
+        System.out.println("File - " + esbStmFile);
 
         /* Fetching the STM Data from the STM File */
-        if (file != null) {
-            ESBStmData eSBStmData = new ESBStmData(file.toString());
+        if (esbStmFile != null) {
+            ESBStmData eSBStmData = new ESBStmData(esbStmFile.toString());
             stmConData = eSBStmData.getSTMConData();
             stmData = eSBStmData.getStmData();
             System.out.println("Getting STM Data");
@@ -1577,8 +1585,7 @@ public class MainStageController implements Initializable {
     //Methods to call the executeTestPlan method to fetch the Data --Adithya
     public void processTestPlan(List checkOptionData) {
         System.out.println("processTestPlan called");
-        progstatus_label.setText("Executing Test Plan");
-        progressLoadingImage();
+
         for (Object item : checkOptionData) {
 
             System.out.println("Calling Check Option " + item.toString());
@@ -1602,6 +1609,28 @@ public class MainStageController implements Initializable {
                         return null;
                     }
                 };
+
+                task.setOnRunning(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Executing Count Test Plan");
+                        progressLoadingImage();
+
+                    }
+                });
+
+                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Execution Completed");
+                        progressCompletedImage();
+                        result_save_btn.setDisable(false);
+                        result_clear_btn.setDisable(false);
+
+                    }
+                });
 
                 Thread t = new Thread(task);
                 t.setDaemon(true);
@@ -1637,6 +1666,28 @@ public class MainStageController implements Initializable {
                     }
                 };
 
+                task.setOnRunning(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Executing Null Test Plan");
+                        progressLoadingImage();
+
+                    }
+                });
+
+                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Execution Completed");
+                        progressCompletedImage();
+                        result_save_btn.setDisable(false);
+                        result_clear_btn.setDisable(false);
+
+                    }
+                });
+
                 Thread t = new Thread(task);
                 t.setDaemon(true);
                 t.start();
@@ -1666,6 +1717,28 @@ public class MainStageController implements Initializable {
                     }
                 };
 
+                task.setOnRunning(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Executing Not Null Test Plan");
+                        progressLoadingImage();
+
+                    }
+                });
+
+                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Execution Completed");
+                        progressCompletedImage();
+                        result_save_btn.setDisable(false);
+                        result_clear_btn.setDisable(false);
+
+                    }
+                });
+
                 Thread t = new Thread(task);
                 t.setDaemon(true);
                 t.start();
@@ -1694,6 +1767,28 @@ public class MainStageController implements Initializable {
                         return null;
                     }
                 };
+
+                task.setOnRunning(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Executing Distinct Test Plan");
+                        progressLoadingImage();
+
+                    }
+                });
+
+                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Execution Completed");
+                        progressCompletedImage();
+                        result_save_btn.setDisable(false);
+                        result_clear_btn.setDisable(false);
+
+                    }
+                });
 
                 Thread t = new Thread(task);
                 t.setDaemon(true);
@@ -1725,6 +1820,28 @@ public class MainStageController implements Initializable {
                     }
                 };
 
+                task.setOnRunning(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Executing Duplicate Test Plan");
+                        progressLoadingImage();
+
+                    }
+                });
+
+                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Execution Completed");
+                        progressCompletedImage();
+                        result_save_btn.setDisable(false);
+                        result_clear_btn.setDisable(false);
+
+                    }
+                });
+
                 Thread t = new Thread(task);
                 t.setDaemon(true);
                 t.start();
@@ -1755,6 +1872,28 @@ public class MainStageController implements Initializable {
                     }
                 };
 
+                task.setOnRunning(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Executing Max Test Plan");
+                        progressLoadingImage();
+
+                    }
+                });
+
+                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Execution Completed");
+                        progressCompletedImage();
+                        result_save_btn.setDisable(false);
+                        result_clear_btn.setDisable(false);
+
+                    }
+                });
+
                 Thread t = new Thread(task);
                 t.setDaemon(true);
                 t.start();
@@ -1784,6 +1923,28 @@ public class MainStageController implements Initializable {
                     }
                 };
 
+                task.setOnRunning(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Executing Min Test Plan");
+                        progressLoadingImage();
+
+                    }
+                });
+
+                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Execution Completed");
+                        progressCompletedImage();
+                        result_save_btn.setDisable(false);
+                        result_clear_btn.setDisable(false);
+
+                    }
+                });
+
                 Thread t = new Thread(task);
                 t.setDaemon(true);
                 t.start();
@@ -1811,6 +1972,28 @@ public class MainStageController implements Initializable {
                         return null;
                     }
                 };
+
+                task.setOnRunning(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Executing Sum Test Plan");
+                        progressLoadingImage();
+
+                    }
+                });
+
+                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Execution Completed");
+                        progressCompletedImage();
+                        result_save_btn.setDisable(false);
+                        result_clear_btn.setDisable(false);
+
+                    }
+                });
 
                 Thread t = new Thread(task);
                 t.setDaemon(true);
@@ -1856,6 +2039,16 @@ public class MainStageController implements Initializable {
                     }
                 };
 
+                task.setOnRunning(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+
+                        progstatus_label.setText("Executing Complete Test Plan");
+                        progressLoadingImage();
+
+                    }
+                });
+
                 task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
                     @Override
                     public void handle(WorkerStateEvent event) {
@@ -1867,6 +2060,11 @@ public class MainStageController implements Initializable {
                             dataValid_status_lbl.setText("Unmatched");
                             dataValid_status_lbl.setStyle("-fx-background-color: red");
                         }
+
+                        progstatus_label.setText("Execution Completed");
+                        progressCompletedImage();
+                        result_save_btn.setDisable(false);
+                        result_clear_btn.setDisable(false);
                     }
                 });
 
@@ -1928,4 +2126,141 @@ public class MainStageController implements Initializable {
 
     }
 
+    @FXML
+    public void clearResultButton(ActionEvent ae) {
+        result_save_btn.setDisable(true);
+        for (Map.Entry<String, TableView> entry : resultTableList.entrySet()) {
+            String key = entry.getKey();
+            TableView value = entry.getValue();
+
+            value.getItems().clear();
+        }
+    }
+
+    //Storing the tableview into List
+    public Map<String, TableView> getSelectedResultTableList(List checkOptions) {
+        for (Object checkOption : checkOptions) {
+            if (checkOption.equals("total_cnts")) {
+                resultTableList.put("total_cnts", totalCounts_tbl_view);
+            }
+
+            if (checkOption.toString().equals("null_cnts")) {
+                resultTableList.put("null_cnts", totalCounts_null_tbl_view);
+            }
+
+            if (checkOption.toString().equals("not_null_cnts")) {
+                resultTableList.put("not_null_cnts", totalCounts_tbl_view);
+            }
+
+            if (checkOption.toString()
+                    .equals("dst_cnts")) {
+                resultTableList.put("dst_cnts", countDistinct_tbl_view);
+            }
+
+            if (checkOption.toString()
+                    .equals("dup_cnts")) {
+                resultTableList.put("dup_cnts", countDupli_tbl_view);
+            }
+
+            if (checkOption.toString()
+                    .equals("max_cols")) {
+                resultTableList.put("max_cols", max_tbl_view);
+            }
+
+            if (checkOption.toString()
+                    .equals("min_cols")) {
+                resultTableList.put("min_cols", min_tbl_view);
+            }
+
+            if (checkOption.toString()
+                    .equals("sum_num_cols")) {
+                resultTableList.put("sum_num_cols", countNumerics_tbl_view);
+            }
+
+            if (checkOption.toString()
+                    .equals("cmpl_data")) {
+                resultTableList.put("cmpl_data_src", sourceData_tbl_view);
+                resultTableList.put("cmpl_data_trg", targetData_tbl_view);
+                resultTableList.put("cmpl_un_data_src", unMatchsourceData_tbl_view);
+                resultTableList.put("cmpl_un_data_trg", unMatchtargetData_tbl_view);
+            }
+        }
+
+        return resultTableList;
+    }
+
+    public void saveTestResults(List checkOptions) {
+
+        Map<String, TableView> resultTableList = getSelectedResultTableList(checkOptions);
+        WritableWorkbook wbook;
+        WritableSheet shSheet;
+        WritableSheet tmpSheet;
+
+        if (esbStmFile != null) //create excel sheet
+        {
+            try {
+                wbook = Workbook.createWorkbook(new File(esbStmFile.getName().substring(0, esbStmFile.getName().lastIndexOf('.')) + "_Results.xls"));
+
+//                System.out.println("File Name: " + esbStmFile.getName().substring(0, esbStmFile.getName().lastIndexOf('.')));
+                int mapIndex = 0;
+
+                for (Map.Entry<String, TableView> entry : resultTableList.entrySet()) {
+                    String key = entry.getKey();
+                    TableView value = entry.getValue();
+                    int k = 0, j = 0;
+                    System.out.println("Sheet Data: " + mapIndex);
+                    System.out.println("Key: " + key.toUpperCase());
+                    shSheet = wbook.createSheet(key.toUpperCase(), mapIndex++);
+
+                    System.out.println("srccolnames" + value.getColumns());
+//                    for (Object i : value.getItems()) {
+//
+//                        jxl.write.Label labTemp = new jxl.write.Label(k++, j, i.toString());
+//                        System.out.println("Label : " + labTemp.getString());
+//                        try {
+//                            shSheet.addCell(labTemp);
+//                        } catch (WriteException ex) {
+//                            Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+                    for (int m = 0; m < value.getItems().size(); m++) {
+//                        k = 0;
+                        ObservableList rowList = value.getItems();
+
+                        for (Object t : rowList) {
+
+                            System.out.println(t.getClass().getClass().getClass());
+                            jxl.write.Label labTemp = new jxl.write.Label(k++, m + 1, t.toString());
+                            try {
+                                shSheet.addCell(labTemp);
+                            } catch (WriteException ex) {
+                                Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+
+                        }
+                    
+    
+                    }
+
+
+
+                }
+
+                wbook.write();
+                wbook.close();
+            } catch (IOException ex) {
+                Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
+
+            } catch (WriteException ex) {
+                Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+    }
+
+    public void saveResultAction(ActionEvent ae) {
+
+        List ll = getSelectedTestCases();
+        saveTestResults(ll);
+    }
 }
