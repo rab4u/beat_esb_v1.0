@@ -1529,14 +1529,14 @@ public class MainStageController implements Initializable {
                 System.out.println("SRC Count: " + srcCnt);
                 System.out.println("trg Count: " + trgCnt);
 
-                if (bean == null) {
+               
                     bean = new TotalCountBean();
                     bean.srcCnt.setValue(srcCnt);
                     bean.trgCnt.setValue(trgCnt);
 //bean.getSrcCnt().equals(bean.getTrgCnt())
                     bean.totCnt.setValue(bean.getSrcCnt().equals(bean.getTrgCnt()) ? "Passed" : "Failed");
                     total_cnt_testplan_data.add(bean);
-                }
+                
 
                 System.out.println("List: " + total_cnt_testplan_data.toString());
 
@@ -1595,7 +1595,8 @@ public class MainStageController implements Initializable {
 
             if (item.toString().equals("total_cnts")) {
                 //Calling the Plan Execution
-
+               
+                totalCounts_tbl_view.getItems().clear();
                 Task task = new Task<Void>() {
                     @Override
                     public Void call() {
