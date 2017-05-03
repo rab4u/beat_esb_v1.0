@@ -18,7 +18,7 @@ public class CountsMaxMinBean {
     public SimpleStringProperty srcColCount = new SimpleStringProperty();
     public SimpleStringProperty trgCol = new SimpleStringProperty();
     public SimpleStringProperty trgColCount = new SimpleStringProperty();
-    public SimpleBooleanProperty result = new SimpleBooleanProperty();
+    public SimpleStringProperty result = new SimpleStringProperty();
 
     public String getSrcCol() {
         return srcCol.get();
@@ -36,15 +36,13 @@ public class CountsMaxMinBean {
         return trgColCount.get();
     }
 
-    public boolean getResult() {
+    public String getResult() {
         return result.get();
     }
 
     @Override
     public String toString() {
-        return "CountsMaxMinBean{" + "srcCol=" + srcCol.get() + ", srcColData=" + srcColCount.get() + ", trgCol=" + trgCol.get() + ", trgColData=" + trgColCount.get() + ", result=" + result.get() + '}';
+        return srcCol.get() + "," + srcColCount.get() + "," + trgCol.get() + "," + trgColCount.get() + "," + result.get();
     }
-    
-     
 
 }

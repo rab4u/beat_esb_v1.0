@@ -380,12 +380,12 @@
                                                                               <Insets left="10.0" right="10.0" />
                                                                            </HBox.margin>
                                                                         </Button>
-                                                                        <Button disable="true" mnemonicParsing="false" text="SAVE" HBox.hgrow="ALWAYS">
+                                                                        <Button fx:id="result_save_btn" disable="true" mnemonicParsing="false" onAction="#saveResultAction" text="SAVE" HBox.hgrow="ALWAYS">
                                                                            <HBox.margin>
                                                                               <Insets right="10.0" />
                                                                            </HBox.margin>
                                                                         </Button>
-                                                                        <Button disable="true" mnemonicParsing="false" text="CLEAR" HBox.hgrow="ALWAYS">
+                                                                        <Button fx:id="result_clear_btn" disable="true" mnemonicParsing="false" onAction="#clearResultButton" text="CLEAR" HBox.hgrow="ALWAYS">
                                                                            <HBox.margin>
                                                                               <Insets right="10.0" />
                                                                            </HBox.margin>

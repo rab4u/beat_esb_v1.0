@@ -13,7 +13,7 @@ public class TotalCountBean {
 
     public SimpleStringProperty srcCnt = new SimpleStringProperty();
     public SimpleStringProperty trgCnt = new SimpleStringProperty();
-    public SimpleBooleanProperty totCnt = new SimpleBooleanProperty();
+    public SimpleStringProperty totCnt = new SimpleStringProperty();
 
     public String getSrcCnt() {
         return srcCnt.get();
@@ -23,8 +23,13 @@ public class TotalCountBean {
         return trgCnt.get();
     }
 
-    public boolean getTotCnt() {
+    public String getTotCnt() {
         return totCnt.get();
+    }
+
+    @Override
+    public String toString() {
+        return "srcCnt," + getSrcCnt() + ",trgCnt," + getTrgCnt() + "," + getTotCnt();
     }
 
 }

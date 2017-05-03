@@ -9,10 +9,13 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -974,7 +977,6 @@ public class MainStageController implements Initializable {
 
     @FXML
     public void autoResultRunButtonAction() throws Exception {
-
         List ll = getSelectedTestCases();
 
         System.out.println("Selected TestCases : " + ll);
@@ -1377,9 +1379,10 @@ public class MainStageController implements Initializable {
         task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent event) {
-
                 progstatus_label.setText("Test Plan Generated");
                 progressCompletedImage();
+
+                // clearResultButton(new ActionEvent());
                 processTestPlan(ll);
 
             }
@@ -1530,8 +1533,8 @@ public class MainStageController implements Initializable {
                     bean = new TotalCountBean();
                     bean.srcCnt.setValue(srcCnt);
                     bean.trgCnt.setValue(trgCnt);
-
-                    bean.totCnt.setValue(bean.getSrcCnt().equals(bean.getTrgCnt()));
+//bean.getSrcCnt().equals(bean.getTrgCnt())
+                    bean.totCnt.setValue(bean.getSrcCnt().equals(bean.getTrgCnt()) ? "Passed" : "Failed");
                     total_cnt_testplan_data.add(bean);
                 }
 
@@ -1556,7 +1559,7 @@ public class MainStageController implements Initializable {
 
                 countsMaxMinBean.trgCol.setValue(trgQuery.split(" ")[3]);
                 countsMaxMinBean.trgColCount.setValue(Integer.toString(Integer.parseInt(trgCnt) - Integer.parseInt(trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""))));
-                countsMaxMinBean.result.setValue(countsMaxMinBean.getSrcColCount().equals(countsMaxMinBean.getTrgColCount()));
+                countsMaxMinBean.result.setValue(countsMaxMinBean.getSrcColCount().equals(countsMaxMinBean.getTrgColCount()) ? "Passed" : "Failed");
 
                 dataStore.add(countsMaxMinBean);
 
@@ -1569,7 +1572,7 @@ public class MainStageController implements Initializable {
                 countsMaxMinBean.srcColCount.setValue(srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
                 countsMaxMinBean.trgCol.setValue(trgQuery.split(" ")[3]);
                 countsMaxMinBean.trgColCount.setValue(trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
-                countsMaxMinBean.result.setValue(countsMaxMinBean.getSrcColCount().equals(countsMaxMinBean.getTrgColCount()));
+                countsMaxMinBean.result.setValue(countsMaxMinBean.getSrcColCount().equals(countsMaxMinBean.getTrgColCount()) ? "Passed" : "Failed");
 
                 dataStore.add(countsMaxMinBean);
 
@@ -1598,10 +1601,12 @@ public class MainStageController implements Initializable {
                     public Void call() {
 
                         //non ui code
+                        // totalCounts_tbl_view.getItems().clear();
                         execueteTestPlan(total_cnt_testplan_data, item.toString(), total_cnt_testplan.get("Total_Cnt_Src_Testcase").toString(), total_cnt_testplan.get("Total_Cnt_Trg_Testcase").toString(), src_table, trg_table);
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
+
                                 totalCounts_tbl_view.setItems(total_cnt_testplan_data);
                                 CountTableRowHighlighter();
                             }
@@ -1639,7 +1644,7 @@ public class MainStageController implements Initializable {
             }
 
             if (item.toString().equals("null_cnts")) {
-
+                totalCounts_null_tbl_view.getItems().clear();
                 System.out.println("Null Count Test Plan :" + null_cnt_testplan);
                 Task task = new Task<Void>() {
                     @Override
@@ -1695,7 +1700,7 @@ public class MainStageController implements Initializable {
             }
 
             if (item.toString().equals("not_null_cnts")) {
-
+                totalCountsnot_null_tbl_view.getItems().clear();
                 System.out.println("Not Null Count Test Plan :" + notnull_cnt_testplan);
                 Task task = new Task<Void>() {
                     @Override
@@ -1709,6 +1714,7 @@ public class MainStageController implements Initializable {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
+
                                 BasicTestResulTableRowHighlighter(totalCountsnot_null_tbl_view);
                                 totalCountsnot_null_tbl_view.setItems(notnull_cnt_testplan_data);
                             }
@@ -1746,7 +1752,7 @@ public class MainStageController implements Initializable {
 
             if (item.toString()
                     .equals("dst_cnts")) {
-
+                countDistinct_tbl_view.getItems().clear();
                 System.out.println("Distinct Count Test Plan :" + dst_cnt_testplan);
                 Task task = new Task<Void>() {
                     @Override
@@ -1760,6 +1766,7 @@ public class MainStageController implements Initializable {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
+
                                 BasicTestResulTableRowHighlighter(countDistinct_tbl_view);
                                 countDistinct_tbl_view.setItems(dst_cnt_testplan_data);
                             }
@@ -1799,7 +1806,7 @@ public class MainStageController implements Initializable {
                     .equals("dup_cnts")) {
 
                 System.out.println("Duplicate Count Test Plan :" + dup_cnt_testplan);
-
+                countDupli_tbl_view.getItems().clear();
                 Task task = new Task<Void>() {
                     @Override
                     public Void call() {
@@ -1812,6 +1819,7 @@ public class MainStageController implements Initializable {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
+
                                 BasicTestResulTableRowHighlighter(countDupli_tbl_view);
                                 countDupli_tbl_view.setItems(dup_cnt_testplan_data);
                             }
@@ -1850,7 +1858,7 @@ public class MainStageController implements Initializable {
 
             if (item.toString()
                     .equals("max_cols")) {
-
+                max_tbl_view.getItems().clear();
                 System.out.println("Max of Col Test Plan :" + max_col_testplan);
                 Task task = new Task<Void>() {
                     @Override
@@ -1864,6 +1872,7 @@ public class MainStageController implements Initializable {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
+
                                 BasicTestResulTableRowHighlighter(max_tbl_view);
                                 max_tbl_view.setItems(max_col_testplan_data);
                             }
@@ -1901,7 +1910,7 @@ public class MainStageController implements Initializable {
 
             if (item.toString()
                     .equals("min_cols")) {
-
+                min_tbl_view.getItems().clear();
                 System.out.println("Min of Col Test Plan :" + min_col_testplan);
                 Task task = new Task<Void>() {
                     @Override
@@ -1915,6 +1924,7 @@ public class MainStageController implements Initializable {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
+
                                 BasicTestResulTableRowHighlighter(min_tbl_view);
                                 min_tbl_view.setItems(min_col_testplan_data);
                             }
@@ -1952,6 +1962,7 @@ public class MainStageController implements Initializable {
 
             if (item.toString()
                     .equals("sum_num_cols")) {
+                countNumerics_tbl_view.getItems().clear();
                 Task task = new Task<Void>() {
                     @Override
                     public Void call() {
@@ -1965,6 +1976,7 @@ public class MainStageController implements Initializable {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
+
                                 BasicTestResulTableRowHighlighter(countNumerics_tbl_view);
                                 countNumerics_tbl_view.setItems(sum_num_testplan_data);
                             }
@@ -2017,6 +2029,10 @@ public class MainStageController implements Initializable {
                         Platform.runLater(new Runnable() {
                             public void run() {
                                 //ui code
+                                sourceData_tbl_view.getItems().clear();
+                                sourceData_tbl_view.getColumns().clear();
+                                targetData_tbl_view.getItems().clear();
+                                targetData_tbl_view.getColumns().clear();
                                 setColumnsTableView(sourceData_tbl_view, src_table);
                                 setColumnsTableView(targetData_tbl_view, trg_table);
                                 sourceData_tbl_view.setItems(srcCmplResult);
@@ -2029,6 +2045,8 @@ public class MainStageController implements Initializable {
 
                                 unMatchsourceData_tbl_view.getItems().clear();
                                 unMatchtargetData_tbl_view.getItems().clear();
+                                unMatchsourceData_tbl_view.getColumns().clear();
+                                unMatchtargetData_tbl_view.getColumns().clear();
 
                                 unMatchsourceData_tbl_view.getItems().addAll(srcremovedList);
                                 unMatchtargetData_tbl_view.getItems().addAll(trgremovedList);
@@ -2088,10 +2106,11 @@ public class MainStageController implements Initializable {
                     setStyle("");
                 } else {
                     //Now 'item' has all the info of the Person in this row
-                    if (!item.totCnt.getValue()) {
+//                    !item.totCnt.getValue()
+                    if (item.totCnt.getValue().equalsIgnoreCase("Failed")) {
                         //We apply now the changes in all the cells of the row
                         //setStyle("-fx-background-color: #ff9999");
-                        setStyle("-fx-background-color: #ff9999");
+                        setStyle("-fx-background-color: red");
 
                     }
 
@@ -2112,10 +2131,10 @@ public class MainStageController implements Initializable {
                 } else {
 
                     //Now 'item' has all the info of the Person in this row
-                    if (!item.result.getValue()) {
+                    if (item.result.getValue().equalsIgnoreCase("Failed")) {
                         //We apply now the changes in all the cells of the row
                         //setStyle("-fx-background-color: #ff9999");
-                        setStyle("-fx-background-color: #ff9999");
+                        setStyle("-fx-background-color: red");
 
                     } else {
                         setStyle("");
@@ -2128,6 +2147,9 @@ public class MainStageController implements Initializable {
 
     @FXML
     public void clearResultButton(ActionEvent ae) {
+
+        Map<String, TableView> resultTableList = getSelectedResultTableList(this.getSelectedTestCases());
+
         result_save_btn.setDisable(true);
         for (Map.Entry<String, TableView> entry : resultTableList.entrySet()) {
             String key = entry.getKey();
@@ -2135,6 +2157,9 @@ public class MainStageController implements Initializable {
 
             value.getItems().clear();
         }
+
+        result_clear_btn.setDisable(true);
+
     }
 
     //Storing the tableview into List
@@ -2149,7 +2174,7 @@ public class MainStageController implements Initializable {
             }
 
             if (checkOption.toString().equals("not_null_cnts")) {
-                resultTableList.put("not_null_cnts", totalCounts_tbl_view);
+                resultTableList.put("not_null_cnts", totalCountsnot_null_tbl_view);
             }
 
             if (checkOption.toString()
@@ -2199,7 +2224,7 @@ public class MainStageController implements Initializable {
         if (esbStmFile != null) //create excel sheet
         {
             try {
-                wbook = Workbook.createWorkbook(new File(esbStmFile.getName().substring(0, esbStmFile.getName().lastIndexOf('.')) + "_Results.xls"));
+                wbook = Workbook.createWorkbook(new File(esbStmFile.toString().substring(0, esbStmFile.toString().lastIndexOf('.')) + "_Results.xls"));
 
 //                System.out.println("File Name: " + esbStmFile.getName().substring(0, esbStmFile.getName().lastIndexOf('.')));
                 int mapIndex = 0;
@@ -2207,42 +2232,87 @@ public class MainStageController implements Initializable {
                 for (Map.Entry<String, TableView> entry : resultTableList.entrySet()) {
                     String key = entry.getKey();
                     TableView value = entry.getValue();
+
                     int k = 0, j = 0;
-                    System.out.println("Sheet Data: " + mapIndex);
-                    System.out.println("Key: " + key.toUpperCase());
+
                     shSheet = wbook.createSheet(key.toUpperCase(), mapIndex++);
 
                     System.out.println("srccolnames" + value.getColumns());
-//                    for (Object i : value.getItems()) {
-//
-//                        jxl.write.Label labTemp = new jxl.write.Label(k++, j, i.toString());
-//                        System.out.println("Label : " + labTemp.getString());
-//                        try {
-//                            shSheet.addCell(labTemp);
-//                        } catch (WriteException ex) {
-//                            Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-                    for (int m = 0; m < value.getItems().size(); m++) {
-//                        k = 0;
-                        ObservableList rowList = value.getItems();
 
-                        for (Object t : rowList) {
+                    String[] colNames = {"Source Column", "Source Value", "Target Column", "Target Value", "Result"};
 
-                            System.out.println(t.getClass().getClass().getClass());
-                            jxl.write.Label labTemp = new jxl.write.Label(k++, m + 1, t.toString());
-                            try {
-                                shSheet.addCell(labTemp);
-                            } catch (WriteException ex) {
-                                Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
+                    if (!key.contains("data")) {
+                        for (int m = 0; m < value.getItems().size(); m++) {
+
+                            for (int l = 0; l < colNames.length; l++) {
+
+                                jxl.write.Label labTemp = new jxl.write.Label(l, 0, colNames[l]);
+                                try {
+                                    shSheet.addCell(labTemp);
+                                } catch (WriteException ex) {
+                                    Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+                            }
+
+                            String itemData = value.getItems().get(m).toString();
+                            System.out.println(value.getItems().get(m).toString());
+
+                            String[] itemDataList = itemData.split(",");
+
+                            for (int l = 0; l < itemDataList.length; l++) {
+                                String data = itemDataList[l];
+                                jxl.write.Label labTemp = new jxl.write.Label(l, m + 1, data);
+                                try {
+                                    shSheet.addCell(labTemp);
+                                } catch (WriteException ex) {
+                                    Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
                             }
 
                         }
-                    
-    
+
+                    } else {
+
+                        //For Complete Data
+                        List cmpltColNames;
+
+                        for (int m = 0; m < value.getItems().size(); m++) {
+                            if (key.contains("src")) {
+                                cmpltColNames = src_table;
+                            } else {
+                                cmpltColNames = trg_table;
+                            }
+
+                            for (int l = 0; l < cmpltColNames.size(); l++) {
+
+                                jxl.write.Label labTemp = new jxl.write.Label(l, 0, cmpltColNames.get(l).toString());
+                                try {
+                                    shSheet.addCell(labTemp);
+                                } catch (WriteException ex) {
+                                    Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+                            }
+
+                            String itemData = value.getItems().get(m).toString();
+                            System.out.println(value.getItems().get(m).toString());
+
+                            String[] itemDataList = itemData.split(",");
+
+                            for (int l = 0; l < itemDataList.length; l++) {
+                                String data = itemDataList[l];
+                                jxl.write.Label labTemp = new jxl.write.Label(l, m + 1, data);
+                                try {
+                                    shSheet.addCell(labTemp);
+                                } catch (WriteException ex) {
+                                    Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+
+                        }
+
                     }
-
-
-
                 }
 
                 wbook.write();
