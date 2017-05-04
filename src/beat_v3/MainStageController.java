@@ -59,6 +59,9 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
+import static jxl.write.Font.BOLD;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
@@ -1485,6 +1488,8 @@ public class MainStageController implements Initializable {
         stm_conVer_txt_field.setText("");
 
         autoresultrunbt.setDisable(true);
+        result_save_btn.setDisable(true);
+        result_clear_btn.setDisable(true);        
 
     }
 
@@ -2249,7 +2254,7 @@ public class MainStageController implements Initializable {
 
                     System.out.println("srccolnames" + value.getColumns());
 
-                    String[] colNames = {"Source Column", "Source Value", "Target Column", "Target Value", "Result"};
+                    String[] colNames = {"Source TestCase", "Source Value", "Target TestCase", "Target Value", "Result"};
 
                     if (!key.contains("data")) {
                         for (int m = 0; m < value.getItems().size(); m++) {
@@ -2286,6 +2291,11 @@ public class MainStageController implements Initializable {
 
                         //For Complete Data
                         List cmpltColNames;
+                        
+                        WritableFont cellFont = new WritableFont(WritableFont.TIMES,14);
+                        cellFont.setBoldStyle(WritableFont.BOLD);
+                        WritableCellFormat cellFormat = new WritableCellFormat(cellFont);
+                        //cellFormat.setWrap(true); 
 
                         for (int m = 0; m < value.getItems().size(); m++) {
                             if (key.contains("src")) {
@@ -2295,10 +2305,13 @@ public class MainStageController implements Initializable {
                             }
 
                             for (int l = 0; l < cmpltColNames.size(); l++) {
-
-                                jxl.write.Label labTemp = new jxl.write.Label(l, 0, cmpltColNames.get(l).toString());
+                                 
+                                jxl.write.Label labTemp = new jxl.write.Label(l, 0, cmpltColNames.get(l).toString(),cellFormat);
+                                
                                 try {
+                                    shSheet.setColumnView(l,cmpltColNames.get(l).toString().length());
                                     shSheet.addCell(labTemp);
+                                    
                                 } catch (WriteException ex) {
                                     Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -2314,6 +2327,8 @@ public class MainStageController implements Initializable {
                                 String data = itemDataList[l];
                                 jxl.write.Label labTemp = new jxl.write.Label(l, m + 1, data);
                                 try {
+                                    
+                                    shSheet.setColumnView(l,data.length());
                                     shSheet.addCell(labTemp);
                                 } catch (WriteException ex) {
                                     Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
@@ -2327,11 +2342,16 @@ public class MainStageController implements Initializable {
 
                 wbook.write();
                 wbook.close();
+                
+                new AlertUI("Results Saved Successfully");
+                
             } catch (IOException ex) {
                 Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
+                new ExceptionUI(ex);
 
             } catch (WriteException ex) {
                 Logger.getLogger(MainStageController.class.getName()).log(Level.SEVERE, null, ex);
+                new ExceptionUI(ex);
             }
 
         }
