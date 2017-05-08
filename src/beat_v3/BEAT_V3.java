@@ -39,7 +39,7 @@ public class BEAT_V3 extends Application {
         
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/fxml/MainStage.fxml"));
-        root = fxmlLoader.load();
+        root = fxmlLoader.load();   
         System.out.println("Root :" +root);
         controller = fxmlLoader.<MainStageController>getController();
         Scene scene = new Scene(root);

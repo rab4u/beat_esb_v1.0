@@ -398,9 +398,9 @@
                                                               <tabs>
                                                                   <Tab fx:id="basicResultTab" style="-fx-background-color: #D4E6F1;" text="BASIC">
                                                                      <content>
-                                                                        <TabPane fx:id="tbpaneautoresult1" prefHeight="200.0" prefWidth="200.0" rotateGraphic="true" tabClosingPolicy="UNAVAILABLE">
+                                                                        <TabPane fx:id="tbpaneautoresult" prefHeight="200.0" prefWidth="200.0" rotateGraphic="true" tabClosingPolicy="UNAVAILABLE">
                                                                            <tabs>
-                                                                              <Tab fx:id="tabrslttotalcnt1" text="Total Counts">
+                                                                              <Tab fx:id="tabrslttotalcnt" text="Total Counts">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
@@ -418,7 +418,7 @@
                                                                                     </AnchorPane>
                                                                                  </content>
                                                                               </Tab>
-                                                                              <Tab fx:id="tabrsltnullcol1" text="Count of Nulls / Column">
+                                                                              <Tab fx:id="tabrsltnullcol" text="Count of Nulls / Column">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
@@ -437,7 +437,7 @@
                                                                                     </AnchorPane>
                                                                                  </content>
                                                                               </Tab>
-                                                                              <Tab fx:id="tabrsltnotnullcol1" text="Count of Not Nulls / Column">
+                                                                              <Tab fx:id="tabrsltnotnullcol" text="Count of Not Nulls / Column">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
@@ -456,7 +456,7 @@
                                                                                     </AnchorPane>
                                                                                  </content>
                                                                               </Tab>
-                                                                              <Tab fx:id="tabrsltdupcol1" text="Count of Duplicates / Column">
+                                                                              <Tab fx:id="tabrsltdupcol" text="Count of Duplicates / Column">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
@@ -475,7 +475,7 @@
                                                                                     </AnchorPane>
                                                                                  </content>
                                                                               </Tab>
-                                                                              <Tab fx:id="tabrsltdstcol1" text="Count of Distinct / Column">
+                                                                              <Tab fx:id="tabrsltdstcol" text="Count of Distinct / Column">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
@@ -494,7 +494,7 @@
                                                                                     </AnchorPane>
                                                                                  </content>
                                                                               </Tab>
-                                                                              <Tab fx:id="tabrsltsumcol1" text="Count of Numerics / Column">
+                                                                              <Tab fx:id="tabrsltsumcol" text="Count of Numerics / Column">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
@@ -513,7 +513,7 @@
                                                                                     </AnchorPane>
                                                                                  </content>
                                                                               </Tab>
-                                                                              <Tab fx:id="tabrsltmaxcol1" text="Max / Column">
+                                                                              <Tab fx:id="tabrsltmaxcol" text="Max / Column">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>
@@ -532,7 +532,7 @@
                                                                                     </AnchorPane>
                                                                                  </content>
                                                                               </Tab>
-                                                                              <Tab fx:id="tabrsltmincol1" text="Min / Column">
+                                                                              <Tab fx:id="tabrsltmincol" text="Min / Column">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                        <children>

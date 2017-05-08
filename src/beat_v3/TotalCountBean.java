@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Adithya
  */
 
-/*Bean for the Total Count  */
+/*Bean for the Total Count Data*/
 public class TotalCountBean {
 
     public SimpleStringProperty srcCnt = new SimpleStringProperty();

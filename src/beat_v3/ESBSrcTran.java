@@ -20,7 +20,7 @@ import javafx.collections.ObservableSet;
  * @author Adithya
  */
 
-/*Data parsing for the transformation of the Data to the required data*/
+/*Data parsing for the transformation of the Data to the required ESBStmBean fields*/
 public class ESBSrcTran {
 
     private ObservableList<ESBStmBean> esbStmData;

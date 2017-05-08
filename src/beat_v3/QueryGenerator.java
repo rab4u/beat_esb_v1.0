@@ -28,7 +28,10 @@ public class QueryGenerator {
         if (type.equalsIgnoreCase("db")) {
             qry = "select count(1) as " + data.trim() + " from " + schema + "." + tblname + " where " + data.trim() + " is null";
         } else {
-            qry = "select count(1) as " + data.trim() + " from " + tblname + " where lower(" + data.trim() + ") = 'null' or lower(" + data.trim() + ") = ''";
+//            qry = "select count(1) as " + data.trim() + " from " + tblname + " where lower(" + data.trim() + ") = 'null' or lower(" + data.trim() + ") = ''";
+//Changed the query due to invalid results --Adithya
+            qry = "select count(1) as " + data.trim() + " from " + tblname + " where  lower(" + data.trim() + ") = ''";
+
         }
 
         return qry;
@@ -42,7 +45,9 @@ public class QueryGenerator {
         if (type.equalsIgnoreCase("db")) {
             qry = "select count(1) as " + data.trim() + " from " + schema + "." + tblname + " where " + data.trim() + " is  not null";
         } else {
-            qry = "select count(1) as " + data.trim() + " from " + tblname + " where lower(" + data.trim() + ") != 'null' or lower(" + data.trim() + ") != ''";
+//            qry = "select count(1) as " + data.trim() + " from " + tblname + " where lower(" + data.trim() + ") != '\\n' or lower(" + data.trim() + ") != ''";
+//Changed the query due to invalid not null results  --Adithya
+            qry = "select count(1) as " + data.trim() + " from " + tblname + " where  lower(" + data.trim() + ") != ''";
         }
 
         return qry;

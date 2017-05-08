@@ -12,6 +12,8 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Adithya
  */
+
+/*Bean for all other Counts on the STM data except Total Counts & Advanced table data Processing */
 public class CountsMaxMinBean {
 
     public SimpleStringProperty srcCol = new SimpleStringProperty();

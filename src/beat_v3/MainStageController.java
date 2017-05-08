@@ -312,6 +312,8 @@ public class MainStageController implements Initializable {
 
         //initailizing csv sql engine
         cssqleng = new CSVSQLEngine();
+        
+        
 
         //workspaceSplitPane.setDividerPositions(10);       
         //resultAnchorPane.setVisible(false);
@@ -353,10 +355,18 @@ public class MainStageController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> ov,
                     Boolean old_val, Boolean new_val) {
 
+                System.out.println("Basic : "+ tbpaneautoresult);
+                System.out.println("Totoal Cnt : "+ tbpaneautoresult);
+                System.out.println("Tab index : "+ tabindex);
+                System.out.println("Index: "+tbpaneautoresult.getTabs().indexOf(tabrslttotalcnt));
+                       
+                      
+                
                 if (chktcnts.isSelected()) {
                     addTab(tbpaneautoresult, tabrslttotalcnt, tabindex);
 
                 } else {
+                    
                     tabindex = tbpaneautoresult.getTabs().indexOf(tabrslttotalcnt);
                     closeTab(tabrslttotalcnt);
                 }
@@ -458,6 +468,8 @@ public class MainStageController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> ov,
                     Boolean old_val, Boolean new_val) {
 
+                
+                
                 if (chkmin.isSelected()) {
                     addTab(tbpaneautoresult, tabrsltmincol, tabindex);
 
@@ -1563,6 +1575,8 @@ public class MainStageController implements Initializable {
                 countsMaxMinBean.srcColCount.setValue(Integer.toString(Integer.parseInt(srcCnt) - Integer.parseInt(srcResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""))));
 
                 countsMaxMinBean.trgCol.setValue(trgQuery.split(" ")[3]);
+                
+                //Issue while Counting the Data
                 countsMaxMinBean.trgColCount.setValue(Integer.toString(Integer.parseInt(trgCnt) - Integer.parseInt(trgResult.toString().replaceAll("\\[", "").replaceAll("\\]", ""))));
                 countsMaxMinBean.result.setValue(countsMaxMinBean.getSrcColCount().equals(countsMaxMinBean.getTrgColCount()) ? "Passed" : "Failed");
 
