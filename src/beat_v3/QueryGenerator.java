@@ -30,7 +30,7 @@ public class QueryGenerator {
         } else {
 //            qry = "select count(1) as " + data.trim() + " from " + tblname + " where lower(" + data.trim() + ") = 'null' or lower(" + data.trim() + ") = ''";
 //Changed the query due to invalid results --Adithya
-            qry = "select count(1) as " + data.trim() + " from " + tblname + " where  lower(" + data.trim() + ") = ''";
+            qry = "select count(1) as " + data.trim() + " from " + tblname + " where  lower(" + data.trim() + ") in (null,'')";
 
         }
 
@@ -47,7 +47,7 @@ public class QueryGenerator {
         } else {
 //            qry = "select count(1) as " + data.trim() + " from " + tblname + " where lower(" + data.trim() + ") != '\\n' or lower(" + data.trim() + ") != ''";
 //Changed the query due to invalid not null results  --Adithya
-            qry = "select count(1) as " + data.trim() + " from " + tblname + " where  lower(" + data.trim() + ") != ''";
+            qry = "select count(1) as " + data.trim() + " from " + tblname + " where  lower(" + data.trim() + ") not in(null,'')";
         }
 
         return qry;
